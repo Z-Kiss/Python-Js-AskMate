@@ -26,13 +26,17 @@ def register():
             return redirect('/register')
         return redirect("/")
 
-
+@app.route("/login")
+def login():
+    if request.method == 'GET':
+        return render_template('login.html')
+    if request.method == 'POST':
+        username = request.form.get('usernamew')
 
 
 
 @app.route("/")
 def short_five_latest():
-    title = 'Five recent Questions'
     questions = data_manager.show_five_latest()
     tags = [data_manager.get_tags_for_question(question['id']) for question in questions]
     return render_template("show_all_question.html", questions=questions, tags=tags, title=title)
