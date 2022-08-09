@@ -46,8 +46,15 @@ body{
     margin-bottom: 30px;
 }
 
-#logo{
+#logo1{
+    display: flex;
+    align-self: flex-start;
     justify-self: flex-start;
+}
+#logo2{
+    display: flex;
+    align-self: flex-end;
+    justify-self: flex-end;
 }
 #nav_buttons{
     display: flex;
@@ -316,4 +323,12 @@ body{
     border-style: outset;
     padding: 10px;
 
+}
+.nav_buttons_right{
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+.user_buttons{
+    gap: 10px
 }
