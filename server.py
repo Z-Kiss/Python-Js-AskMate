@@ -41,12 +41,10 @@ def login():
 
 @app.route("/")
 def short_five_latest():
-    if 'username' not in session:
-        return render_template('login.html')
-    else:
-        questions = data_manager.show_five_latest()
-        tags = [data_manager.get_tags_for_question(question['id']) for question in questions]
-        return render_template("show_all_question.html", questions=questions, tags=tags)
+    title = 'Five recent Questions'
+    questions = data_manager.show_five_latest()
+    tags = [data_manager.get_tags_for_question(question['id']) for question in questions]
+    return render_template("show_all_question.html", questions=questions, tags=tags, title=title)
 
 @app.route("/list")
 def show_all_questions():
