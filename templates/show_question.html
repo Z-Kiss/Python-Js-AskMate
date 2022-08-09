@@ -93,8 +93,8 @@
                         Vote number:{{ answer.vote_number }}
                        <div><a href="/answer/{{ answer.id }}/new-comment/{{ question.id }}"><button>Write A Comment!</button></a></div>
                        <div id="btn">
-                           <a href="/answer/{{ answer.id }}/vote/up/{{ question.id }}"><button>&uarr;</button></a>
-                           <a href="/answer/{{ answer.id }}/vote/down/{{ question.id }}"><button>&darr;</button></a>
+                           <a href="/{{ user_name }}/answer/{{ answer.id }}/vote/up/{{ question.id }}"><button>&uarr;</button></a>
+                           <a href="/{{ user_name }}/answer/{{ answer.id }}/vote/down/{{ question.id }}"><button>&darr;</button></a>
                        </div>
                    </div>
                    <div class="answer_message">

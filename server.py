@@ -140,16 +140,16 @@ def edit_comment(comment_id, question_id):
     return render_template('edit_answer.html', comment=comment, question_id=question_id)
 
 
-@app.route("/question/<question_id>/vote/<type_of_vote>")
-def vote_question(question_id, type_of_vote):
-    data_manager.update_honor_question(question_id, type_of_vote)
+@app.route("/<user_name>/question/<question_id>/vote/<type_of_vote>")
+def vote_question(user_name, question_id, type_of_vote):
+    data_manager.update_honor_question(user_name, question_id, type_of_vote)
     data_manager.change_vote_question(question_id, type_of_vote)
     return redirect(url_for("show_question", question_id=question_id, view="no"))
 
 
-@app.route("/answer/<answer_id>/vote/<type_of_vote>/<question_id>")
-def vote_answer(answer_id, type_of_vote, question_id):
-    data_manager.update_honor_answer(answer_id, type_of_vote)
+@app.route("/<user_name>/answer/<answer_id>/vote/<type_of_vote>/<question_id>")
+def vote_answer(user_name, answer_id, type_of_vote, question_id):
+    data_manager.update_honor_answer(user_name, answer_id, type_of_vote)
     data_manager.change_vote_answer(answer_id, type_of_vote)
     return redirect(url_for("show_question", question_id=question_id, view="no"))
 
