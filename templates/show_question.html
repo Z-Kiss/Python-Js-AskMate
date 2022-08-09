@@ -33,8 +33,8 @@
             </div>
             <div class="question_footer">
                 <div class="btn">
-                    <div ><a href="/question/{{ question.id }}/vote/up"><button>&uarr;</button></a></div>
-                    <div><a href="/question/{{ question.id }}/vote/down"><button>&darr;</button></a></div>
+                    <div ><a href="/{{ user_name }}/question/{{ question.id }}/vote/up"><button>&uarr;</button></a></div>
+                    <div><a href="/{{ user_name }}/question/{{ question.id }}/vote/down"><button>&darr;</button></a></div>
                 </div>
                 <div class="tag">
                     {% if tags %}
