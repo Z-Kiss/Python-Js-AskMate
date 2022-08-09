@@ -25,8 +25,8 @@ def show_all_question(cursor, order_by='submission_time', order_direction='desc'
 @databases_common.connection_handler
 def show_five_latest(cursor):
     cursor.execute("""
-    SELECT * FROM question
-    ORDER BY submission_time DESC LIMIT 5""")
+        SELECT * FROM question
+        ORDER BY submission_time DESC LIMIT 5""")
     return cursor.fetchall()
 
 
@@ -309,34 +309,30 @@ def add_tags(cursor, tags, question_id):
 
 
 @databases_common.connection_handler
-def update_honor_question(cursor, question_id, vote, ):
+def update_honor_question(cursor, user_name, vote, ):
     if vote == "down":
         query = """
                 UPDATE users_data 
-                SET honor = users_data.honor - 2
-                FROM users_data, question 
-                WHERE question.id = %(question_id)s AND users_data.user_name = question.user_name"""
+                SET honor = honor - 2 
+                WHERE users_data.user_name = %(user_name)s"""
     elif vote == "up":
         query = """
                 UPDATE users_data 
-                SET honor = users_data.honor + 5
-                FROM users_data, question
-                WHERE question.id = %(question_id)s AND users_data.user_name = question.user_name"""
-    cursor.execute(query, {"question_id": question_id})
+                SET honor = honor + 5
+                WHERE users_data.user_name = %(user_name)s"""
+    cursor.execute(query, {"user_name": user_name})
 
 
 @databases_common.connection_handler
-def update_honor_answer(cursor, answer_id, vote):
+def update_honor_answer(cursor, user_name, vote):
     if vote == "down":
         query = """
                 UPDATE users_data 
-                SET honor = users_data.honor - 2 
-                FROM users_data, answer
-                WHERE answer.id = %(answer_id)s AND users_data.user_name = answer.user_name"""
+                SET honor = honor - 2 
+                WHERE users_data.user_name = %(user_name)s"""
     elif vote == "up":
         query = """
                 UPDATE users_data
-                SET honor = users_data.honor + 10
-                FROM users_data, answer
-                WHERE answer.id = %(answer_id)s AND users_data.user_name = answer.user_name"""
-    cursor.execute(query, {"answer_id": answer_id})
+                SET honor = honor + 10
+                WHERE users_data.user_name = %(user_name)s"""
+    cursor.execute(query, {"user_name": user_name})
