@@ -18,7 +18,7 @@ ALTER TABLE IF EXISTS ONLY public.question_tag DROP CONSTRAINT IF EXISTS fk_tag_
 
 DROP TABLE IF EXISTS public.question;
 CREATE TABLE question (
-    user_id serial NOT NULL,
+    user_name TEXT NOT NULL,
     id serial NOT NULL,
     submission_time timestamp without time zone,
     view_number integer,
@@ -30,7 +30,7 @@ CREATE TABLE question (
 
 DROP TABLE IF EXISTS public.answer;
 CREATE TABLE answer (
-    user_id serial NOT NULL,
+    user_name TEXT NOT NULL,
     id serial NOT NULL,
     submission_time timestamp without time zone,
     vote_number integer,
@@ -41,7 +41,7 @@ CREATE TABLE answer (
 
 DROP TABLE IF EXISTS public.comment;
 CREATE TABLE comment (
-    user_id serial NOT NULL,
+    user_name TEXT NOT NULL,
     id serial NOT NULL,
     question_id integer,
     answer_id integer,

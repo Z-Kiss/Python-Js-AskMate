@@ -8,14 +8,6 @@
     {% endif %}
 {% endblock %}
 
-{% block title %}
-    {% if requested_question == None %}
-        Add question
-    {% else %}
-        Edit question
-    {% endif %}
-{% endblock %}
-
 {% block content %}
     <div class="ask_edit_question">
         {% if requested_question == None %}
