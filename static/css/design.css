@@ -25,6 +25,7 @@ body{
     bottom: 0px;
     margin-bottom: 20px;
     width: 100%;
+    z-index: 1;
 }
 .header_container{
     display: flex;
@@ -254,6 +255,8 @@ body{
 .form_wrap{
     display: flex;
     justify-content: center;
+    z-index: 1000000;
+    margin-bottom: 50px;
 }
 .forms{
     display: flex;
@@ -283,3 +286,4 @@ body{
     padding: 20px;
 
 }
+
