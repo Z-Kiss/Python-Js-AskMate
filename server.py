@@ -48,6 +48,15 @@ def login():
     elif request.method == 'GET':
         return render_template('login.html')
 
+
+@app.route("/logout")
+def logout():
+    if 'username' in session:
+        username = session['username']
+        session.clear()
+        flash(f"You have been logged out {username}")
+        return redirect("/")
+
 @app.route("/")
 def short_five_latest():
     if 'username' not in session:
