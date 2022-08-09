@@ -29,7 +29,7 @@ def show_all_questions():
     return flask.render_template("show_all_question.html", questions=questions, tags=tags, title=title)
 
 
-@app.route("/question/<question_id>")
+@app.route("/<user_name>/question/<question_id>")
 def show_question(question_id):
     if request.args.get('view') != "no":
         data_manager.increase_view(question_id)
@@ -144,14 +144,14 @@ def edit_comment(comment_id, question_id):
 def vote_question(user_name, question_id, type_of_vote):
     data_manager.update_honor_question(user_name, question_id, type_of_vote)
     data_manager.change_vote_question(question_id, type_of_vote)
-    return redirect(url_for("show_question", question_id=question_id, view="no"))
+    return redirect(url_for("show_question", question_id=question_id, user_name=user_name, view="no"))
 
 
 @app.route("/<user_name>/answer/<answer_id>/vote/<type_of_vote>/<question_id>")
 def vote_answer(user_name, answer_id, type_of_vote, question_id):
     data_manager.update_honor_answer(user_name, answer_id, type_of_vote)
     data_manager.change_vote_answer(answer_id, type_of_vote)
-    return redirect(url_for("show_question", question_id=question_id, view="no"))
+    return redirect(url_for("show_question", question_id=question_id, user_name=user_name, view="no"))
 
 
 @app.route("/question/search", methods=['GET', 'POST'])
