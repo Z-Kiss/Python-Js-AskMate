@@ -5,6 +5,7 @@ import psycopg2.errors
 from flask import Flask, request, redirect, flash, url_for, render_template,session
 import data_manager
 import user_data_manager
+import utils
 
 app = Flask(__name__)
 
@@ -23,30 +24,46 @@ def register():
         try:
             user_data_manager.register(username, email, psw)
         except psycopg2.errors.UniqueViolation:
-            flash('bad')
-        return redirect("/register")
+            flash('Username or Email already in use!')
+        return redirect("/login")
 
 
-@app.route("/login", methods= ['POST'])
+@app.route('/login', methods=['GET', 'POST'])
 def login():
-    email = request.form.get('email')
+    if request.method == 'POST':
+        email = request.form.get('email')
+        psw = request.form.get('password')
+        user_data = user_data_manager.get_user_data_by_email(email)
+        if user_data:
+            if utils.verify_password(psw, user_data['password']):
+                session['username'] = user_data['user_name']
+                session['role'] = user_data['role']
+                return redirect('/')
+            else:
+                flash('Bad password')
+                return redirect('/login')
+        else:
+            flash('Bad Email')
+            return redirect('/login')
+    elif request.method == 'GET':
+        return render_template('login.html')
 
 
-
-
-
-
-
-
-
-
+@app.route("/logout")
+def logout():
+    if 'username' in session:
+        username = session['username']
+        session.clear()
+        flash(f"You have been logged out {username}")
+        return redirect("/")
 
 @app.route("/")
 def short_five_latest():
-    title = 'Five recent Questions'
+    if 'username' not in session:
+        return redirect('/login')
     questions = data_manager.show_five_latest()
     tags = [data_manager.get_tags_for_question(question['id']) for question in questions]
-    return render_template("show_all_question.html", questions=questions, tags=tags, title=title)
+    return render_template("show_all_question.html", questions=questions, tags=tags)
 
 @app.route("/list")
 def show_all_questions():

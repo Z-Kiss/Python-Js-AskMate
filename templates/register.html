@@ -6,7 +6,9 @@ Register
     {% with messages = get_flashed_messages() %}
         {% if messages %}
             {% for msg in messages %}
-                <p p style="color:#FF0000">{{msg}}</p>
+                <div class="flash_container">
+                    <div class="flash_message">{{msg}}</div>
+                </div>
             {% endfor %}
         {% endif %}
     {% endwith %}
@@ -14,11 +16,11 @@ Register
         <form class="forms" action="/register" method="post">
 
             <label>Username</label>
-            <input type="text" name="username" placeholder="Write your username"><br>
+            <input required type="text" name="username" placeholder="Write your username"><br>
             <label>E-mail</label>
-            <input type="email" name="email" placeholder="Write your email"><br>
+            <input required type="email" name="email" placeholder="Write your email"><br>
             <label>Password</label>
-            <input type="password" name="password" placeholder="Write your password"><br>
+            <input required type="password" name="password" placeholder="Write your password"><br>
             <button type="submit">Register</button>
         </form>
     </div>

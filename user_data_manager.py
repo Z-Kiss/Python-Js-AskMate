@@ -20,3 +20,12 @@ def register(cursor, username, email, password):
     args = {'user_name': username, 'email': email, 'password': password}
     cursor.execute(query, args)
 
+@databases_common.connection_handler
+def get_user_data_by_email(cursor, email):
+    cursor.execute("""
+    SELECT * FROM users_data
+    WHERE email = %(email)s""",
+                   {'email': email})
+    return cursor.fetchone()
+
+
