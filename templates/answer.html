@@ -1,0 +1,26 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+    <div class="write_answer_comment">
+       {% if requested_answer == None %}
+
+            <div class="form_wrap">
+                <form class="forms" action="/add_answer/{{ question_id }}" method="POST" enctype="multipart/form-data">
+                <h1>Tell me Your Answer!</h1>
+                <label for="message">Message:</label><br>
+                <textarea id="message" name="message" rows="8" cols="50" required></textarea><br>
+                <button type="submit" name="submitBtn">Submit answer</button>
+            </form></div>
+       {% else %}
+
+           <div class="form_wrap" >
+               <form class="forms" action='/question/{{ id }}/new-comment' method="POST" enctype="multipart/form-data">
+                <h1>What is Your Comment?</h1>
+                <label for="message">Message:</label><br>
+                <textarea id="message" name="message" rows="8" cols="50" required></textarea><br>
+                <button type="submit" name="submitBtn">Submit comment</button>
+            </form></div>
+       {% endif %}
+    </div>
+{% endblock %}

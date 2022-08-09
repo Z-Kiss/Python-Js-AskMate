@@ -1,0 +1,11 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<h1>Edit comment</h1>
+        <form action="/comment/{{ comment.id }}/edit-comment/{{ question_id }}" method="POST">
+            <label for="message">Message:</label><br>
+                <textarea id="message" name="message" rows="8" cols="50" required>{{ comment.message }}</textarea><br>
+    <button type="submit">Edit comment</button>
+
+{% endblock %}

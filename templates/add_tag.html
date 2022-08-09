@@ -1,0 +1,17 @@
+{% extends 'layout.html' %}
+{% block page_title %}
+    Add tags
+{% endblock %}
+{% block title %}
+    Add tags
+{% endblock %}
+
+{% block content %}
+<form class="search" action="/add_tag/{{ question_id }}" method="POST">
+    <label for="tag">Which tag do you want to add?</label>
+    <br>
+    <br>
+    <input type="text" name="tag">
+    <button type="submit">Add those tags</button>
+</form>
+{% endblock %}

@@ -1,0 +1,72 @@
+{% extends "layout.html" %}
+{% block header %}
+ Search result
+{% endblock %}
+
+{% block title %}
+{% if questions %}
+    Search result!
+{% else %}
+    Search for IT!
+{% endif %}
+{% endblock %}
+
+{% block content %}
+
+<form class="search" action="/question/search" method="POST">
+    <label for="search">What are you searching for?</label>
+    <br><br>
+    <input type="text" name="search">
+
+    <button style="align-self: center" type="submit">For this!</button>
+</form>
+
+{% if questions %}
+     <h1 style="text-align: center">Questions</h1>
+    {% for question in questions %}
+        <div class="question_container">
+            <div class="question">
+                <div class="question_header">
+                        <div class="vote_view">
+                            <div>Title: {{ question.title | safe }}</div>
+                            <div style="display: flex; gap:20px">
+                                <div >Vote: {{ question.vote_number }}</div>
+                                <div >View: {{ question.view_number }}</div>
+                            </div>
+
+                        </div>
+                    <div style="align-self: center"><a href="/question/{{ question.id }}"><button>Check out the Question!</button></a></div>
+                </div>
+                <div class="question_body">
+                    <div><label>Message: <br></label>{{ question.message | safe }}</div>
+                    <div>
+                        {% if question.image %}
+                        <img class="image" src="/static/image/{{ question.image }}" width="200px" height="200px"  alt="">
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="question_footer">
+                    <div class="btn">
+                        <div ><a href="/question/{{ question.id }}/vote/up"><button>&uarr;</button></a></div>
+                        <div><a href="/question/{{ question.id }}/vote/down"><button>&darr;</button></a></div>
+                    </div>
+                    <div class="tag">
+                        {% if tags[loop.index0] %}
+                            Tags:
+                            {% for tag in tags[loop.index0] %}
+                                #{{ tag.name }}
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                    <div class="btn">
+                        <div><a href="/question/{{ question.id }}/new-comment"><button>Add new Comment</button></a></div>
+                        <div><a href="/add_answer/{{ question.id }}"></a><button>Add new answer</button></div>
+                        <div><a href='/question/{{ question.id }}/edit'><button>Edit question</button></a></div>
+                        <div><a href='/delete/question/{{ question.id }}'><button>Delete question</button></a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+{% endfor %}
+{% endif %}
+{% endblock %}

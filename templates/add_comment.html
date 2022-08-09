@@ -1,0 +1,13 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+       <div class="form_wrap">
+        <form class="forms" action="/answer/{{ answer_id }}/new-comment/{{ question_id }}" method="POST" enctype="multipart/form-data">
+            <h1>Write a comment to this answer</h1>
+            <label for="message">Message:</label><br>
+            <textarea id="comment" name="message" placeholder="Add comment" rows="5" cols="40"></textarea><br>
+            <button type="submit">Submit comment</button>
+        </form>
+        </div>
+{% endblock %}

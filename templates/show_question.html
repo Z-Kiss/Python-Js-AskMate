@@ -1,0 +1,145 @@
+{% extends "layout.html" %}
+
+{% block page_title %}
+    Show question
+{% endblock %}
+
+{% block title %}
+    Check out this Question!
+{% endblock %}
+
+{% block content %}
+    <h1 style="text-align: center">Question</h1>
+     <div class="question_container">
+        <div class="question">
+            <div class="question_header">
+                    <div class="vote_view">
+                        <div>Title: {{ question.title }}</div>
+                        <div style="display: flex; gap:20px">
+                            <div >Vote: {{ question.vote_number }}</div>
+                            <div >View: {{ question.view_number }}</div>
+                        </div>
+                    </div>
+                    <div><a href='/question/{{ question.id }}/edit'><button>Edit question</button></a></div>
+                    <div><a href='/delete/question/{{ question.id }}'><button>Delete question</button></a></div>
+            </div>
+            <div class="question_body">
+                <div><label>Message: <br></label>{{ question.message }}</div>
+                <div>
+                    {% if question.image %}
+                    <img class="image" src="/static/image/{{ question.image }}" width="200px" height="200px"  alt="">
+                    {% endif %}
+                </div>
+            </div>
+            <div class="question_footer">
+                <div class="btn">
+                    <div ><a href="/question/{{ question.id }}/vote/up"><button>&uarr;</button></a></div>
+                    <div><a href="/question/{{ question.id }}/vote/down"><button>&darr;</button></a></div>
+                </div>
+                <div class="tag">
+                    {% if tags %}
+                        Tags:
+                        {% for tag in tags %}
+                            #{{ tag.name }}<a href="/delete/{{ question.id }}/{{ tag.id }}/delete_tag"><button>x</button></a>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                <div class="btn">
+                    <div><a href="/question/{{ question.id }}/new-comment"><button>Add new Comment</button></a></div>
+                    <div><a href="/add_answer/{{ question.id }}"></a><button>Add new answer</button></div>
+                    <div><a href="/add_tag/{{ question.id }}"><button>Add tag</button></a></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <h2 style="text-align: center"> Comment of Questions</h2>
+    <div class="comment_container">
+    {%  if comment_of_question %}
+        <div class="comments_container_of_container">
+        {% for comment in comment_of_question %}
+
+        <div class="comment">
+            <div class="comment_header">
+                Created at: {{ comment.submission_time.strftime('%m-%d %H:%M') }}
+            </div>
+            <div class="comment_body">
+                {{ comment.message }}
+            </div>
+        </div>
+
+        {% endfor %}
+        </div>
+    {% else %}
+        <div>
+            There are no Comments... Yet!
+        </div>
+    {% endif %}
+
+    </div>
+
+    <hr>
+    <h2 style="text-align: center">Answers and Comments</h2>
+    <div class="answer_container">
+    {% if answers %}
+
+        {% for answer in answers %}
+        <div class="answer_wrapper">
+
+            <div class="answer_content">
+
+               <div class="answer_body">
+                   <div class="answer_title">
+                        Vote number:{{ answer.vote_number }}
+                       <div><a href="/answer/{{ answer.id }}/new-comment/{{ question.id }}"><button>Write A Comment!</button></a></div>
+                       <div id="btn">
+                           <a href="/answer/{{ answer.id }}/vote/up/{{ question.id }}"><button>&uarr;</button></a>
+                           <a href="/answer/{{ answer.id }}/vote/down/{{ question.id }}"><button>&darr;</button></a>
+                       </div>
+                   </div>
+                   <div class="answer_message">
+                       {{ answer.message }}
+                   </div>
+               </div>
+               {% if answer.image %}
+               <div class="answer_img_wrapper">
+                   <img class="answer_img" src="/static/image/{{ answer.image }}" alt="">
+               </div>
+               {% endif %}
+            </div>
+
+            <div class="answer_comment_wrapper">
+                <div class="answer_comment">
+                    {% if comment_of_answer[loop.index0] %}
+                        {% for comment in comment_of_answer[loop.index0] %}
+                             <div class="answer_comment_body">
+                                <div class="answer_comment_header">
+                                    <div>Posted at:{{ comment.submission_time.strftime('%m-%d %H:%M') }}</div>
+                                    <br>
+                                </div>
+                                <div class="answer_comment_message">
+                                    {{ comment.message }}
+                                </div>
+                            </div>
+                            <br>
+                        {% endfor %}
+                    {% else %}
+                        <div class="case_of_wrapper">
+                            <div class="case_of_no_comm">
+                                <div>There is no comment... Yet!</div>
+                                <div>BuT</div>
+                                <div>You can <a href="/answer/{{ answer.id }}/new-comment/{{ question.id }}"><button>Write One</button></a></div>
+
+                            </div>
+                        </div>
+                    {% endif %}
+
+                </div>
+            </div>
+        </div>
+    <hr>
+        {% endfor %}
+    {% else %}
+        There is no Answer Yet!
+    {% endif %}
+    </div>
+{% endblock %}

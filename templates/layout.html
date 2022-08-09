@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block page_title %} Main page{% endblock %} - Ask Máté</title>
+        <link rel="stylesheet" href="/static/css/design.css">
+
+    </head>
+    <body>
+       {% include 'header.html' %}
+        {% block content %}
+        {% endblock %}
+    {% include 'footer.html' %}
+    </body>
+</html>

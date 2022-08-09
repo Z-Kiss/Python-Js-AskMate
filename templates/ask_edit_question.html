@@ -1,0 +1,52 @@
+{% extends "layout.html" %}
+
+{% block page_title %}
+    {% if requested_question == None %}
+        Add question
+    {% else %}
+        Edit question
+    {% endif %}
+{% endblock %}
+
+{% block title %}
+    {% if requested_question == None %}
+        Add question
+    {% else %}
+        Edit question
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    <div class="ask_edit_question">
+        {% if requested_question == None %}
+        <div class="form_wrap">
+            <form class="forms" action="/add-question" method="post" enctype="multipart/form-data">
+            <h1>Ask a question</h1>
+                <label for="title">Title:</label><br>
+                <textarea id="title" name="title" rows="3" cols="50" required></textarea><br><br>
+                <label for="message">Message:</label><br>
+                <textarea id="message" name="message" rows="8" cols="50" required></textarea><br>
+
+                <input type="file" id="picture" name="picture" accept="image/*" ><br><br>
+                <label for="tag">You can write your tags here</label><br>
+                <input type="text" name="tag">
+                <br>
+                <button type="submit" name="submitBtn">Submit question</button>
+            </form>
+        </div>
+        {% else %}
+        <div class="form_wrap">
+            <form class="forms" action="/question/{{ question.id }}/edit" method="POST">
+                <h1>Edit question</h1>
+                <label for="title">Title:</label><br>
+                <textarea id="title" name="title" rows="3" cols="50" required>{{ question.title }}</textarea><br><br>
+                <label for="message">Message:</label><br>
+                <textarea id="message" name="message" rows="8" cols="50" required>{{ question.message }}</textarea><br>
+                <button type="submit">Update Question</button>
+            </form>
+        </div>
+        {% endif %}
+
+
+
+{% endblock %}
