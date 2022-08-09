@@ -23,7 +23,7 @@ def register():
         try:
             user_data_manager.register(username, email, psw)
         except psycopg2.errors.UniqueViolation:
-            return str(psycopg2.errors.Error)
+            return redirect('/register')
         return redirect("/")
 
 
