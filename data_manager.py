@@ -309,7 +309,7 @@ def add_tags(cursor, tags, question_id):
 
 
 @databases_common.connection_handler
-def change_honor_question(cursor, question_id, vote, ):
+def update_honor_question(cursor, question_id, vote, ):
     if vote == "down":
         query = """
                 UPDATE users_data 
@@ -326,9 +326,9 @@ def change_honor_question(cursor, question_id, vote, ):
 
 
 @databases_common.connection_handler
-def change_honor_answer(cursor, answer_id, vote):
+def update_honor_answer(cursor, answer_id, vote):
     if vote == "down":
-        query = """ 
+        query = """
                 UPDATE users_data 
                 SET honor = users_data.honor - 2 
                 FROM users_data, answer

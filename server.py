@@ -5,7 +5,6 @@ import data_manager
 
 app = Flask(__name__)
 
-
 app.config['SECRET_KEY'] = "francosize"
 
 
@@ -15,6 +14,7 @@ def short_five_latest():
     questions = data_manager.show_five_latest()
     tags = [data_manager.get_tags_for_question(question['id']) for question in questions]
     return render_template("show_all_question.html", questions=questions, tags=tags, title=title)
+
 
 @app.route("/list")
 def show_all_questions():
@@ -28,6 +28,7 @@ def show_all_questions():
     tags = [data_manager.get_tags_for_question(question['id']) for question in questions]
     return flask.render_template("show_all_question.html", questions=questions, tags=tags, title=title)
 
+
 @app.route("/question/<question_id>")
 def show_question(question_id):
     if request.args.get('view') != "no":
@@ -37,7 +38,7 @@ def show_question(question_id):
     tags = data_manager.get_tags_for_question(question_id)
     return flask.render_template("show_question.html", question=question, tags=tags,
                                  comment_of_question=comment_of_question, answers=answers,
-                                 comment_of_answer=comment_of_answer )
+                                 comment_of_answer=comment_of_answer)
 
 
 @app.route("/delete/question/<question_id>")
@@ -85,7 +86,7 @@ def add_answer(question_id):
         return render_template('answer.html', requested_answer=None, question_id=question_id)
 
 
-@app.route('/question/<question_id>/new-comment', methods=['POST','GET'])
+@app.route('/question/<question_id>/new-comment', methods=['POST', 'GET'])
 def new_comment(question_id):
     if request.method == 'POST':
         message = request.form.get('message')
@@ -141,12 +142,14 @@ def edit_comment(comment_id, question_id):
 
 @app.route("/question/<question_id>/vote/<type_of_vote>")
 def vote_question(question_id, type_of_vote):
+    data_manager.update_honor_question(question_id, type_of_vote)
     data_manager.change_vote_question(question_id, type_of_vote)
     return redirect(url_for("show_question", question_id=question_id, view="no"))
 
 
 @app.route("/answer/<answer_id>/vote/<type_of_vote>/<question_id>")
 def vote_answer(answer_id, type_of_vote, question_id):
+    data_manager.update_honor_answer(answer_id, type_of_vote)
     data_manager.change_vote_answer(answer_id, type_of_vote)
     return redirect(url_for("show_question", question_id=question_id, view="no"))
 
@@ -163,7 +166,6 @@ def search_question():
             question['message'] = question['message'].replace(search, "<strong> " + search + " </strong>")
         tags = [data_manager.get_tags_for_question(question['id']) for question in questions]
         return flask.render_template("search_result.html", questions=questions, tags=tags)
-
 
 
 @app.route('/delete/question/comment/<comment_id>/<question_id>')
@@ -183,10 +185,12 @@ def delete_answer(question_id, answer_id):
     data_manager.delete_answer(answer_id)
     return redirect(url_for('show_question', question_id=question_id, view='no'))
 
+
 @app.route('/delete/<question_id>/<tag_id>/delete_tag')
 def delete_tag(question_id, tag_id):
     data_manager.delete_tag(question_id, tag_id)
     return redirect(url_for("show_question", question_id=question_id, view="no"))
+
 
 if __name__ == '__main__':
     app.run(debug=True)
