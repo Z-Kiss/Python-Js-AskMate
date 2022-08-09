@@ -56,6 +56,8 @@ body{
     align-items: center;
     width: 100%;
     flex-direction: row;
+    padding: 30px;
+    height: max-content;
 }
 #nav_but_1{
 
@@ -297,4 +299,21 @@ body{
     padding: 20px;
     margin: 20px;
     border-style: inset;
+}
+.header_nav_container{
+    display: flex;
+}
+.header_nav{
+    display: flex;
+    flex-direction: column;
+    justify-self: flex-start;
+    border-style: outset;
+    padding: 20px;
+}
+.user_buttons{
+    display: flex;
+    flex-direction: column;
+    border-style: outset;
+    padding: 10px;
+
 }
