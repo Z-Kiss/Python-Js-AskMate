@@ -60,7 +60,8 @@
 
         <div class="comment">
             <div class="comment_header">
-                Created at: {{ comment.submission_time.strftime('%m-%d %H:%M') }}
+                <div>Created at: {{ comment.submission_time.strftime('%m-%d %H:%M') }}</div>
+                <div><a href="/delete/question/comment/{{ comment.id }}/{{ question.id }}"><button>X</button></a></div>
             </div>
             <div class="comment_body">
                 {{ comment.message }}
@@ -114,8 +115,10 @@
                              <div class="answer_comment_body">
                                 <div class="answer_comment_header">
                                     <div>Posted at:{{ comment.submission_time.strftime('%m-%d %H:%M') }}</div>
-                                    <br>
+                                    <div><a href='/delete/answer/comment/{{ comment.id }}/{{ question.id }}'><button>X</button></a></div>
+
                                 </div>
+                                 <br>
                                 <div class="answer_comment_message">
                                     {{ comment.message }}
                                 </div>
