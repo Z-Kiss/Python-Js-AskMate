@@ -9,10 +9,7 @@ from flask import request
 
 ALLOWED_EXTENSIONS = {"jpg", "png"}
 
-
 UPLOAD_FOLDER = 'static/image/'
-
-
 
 
 @databases_common.connection_handler
@@ -23,6 +20,7 @@ def show_all_question(cursor, order_by='submission_time', order_direction='desc'
         raise Exception()
     cursor.execute(query)
     return cursor.fetchall()
+
 
 @databases_common.connection_handler
 def show_five_latest(cursor):
@@ -39,13 +37,14 @@ def get_question(cursor, data_id):
                    {"id": data_id})
     return cursor.fetchone()
 
+
 @databases_common.connection_handler
 def get_answer(cursor, answer_id):
     cursor.execute("""
     SELECT *
     FROM answer
     WHERE id = %(answer_id)s""",
-                   {"answer_id":answer_id})
+                   {"answer_id": answer_id})
     return cursor.fetchone()
 
 
@@ -58,7 +57,8 @@ def get_comment(cursor, comment_id):
                    {"comment_id": comment_id})
     return cursor.fetchone()
 
-#get data corresponding something
+
+# get data corresponding something
 @databases_common.connection_handler
 def get_answers_for_question(cursor, data_id):
     cursor.execute("""SELECT * FROM answer
@@ -85,7 +85,8 @@ def get_comment_for_answer(cursor, data_id):
                    {"id": data_id})
     return cursor.fetchall()
 
-#add data
+
+# add data
 
 @databases_common.connection_handler
 def add_question(cursor, title, message, time, image, vote=0, view=0):
@@ -122,7 +123,8 @@ def add_comment(cursor, question_id, message, submission_time, edited_count=0):
             }
     cursor.execute(query, args)
 
-#add data corresponding something
+
+# add data corresponding something
 @databases_common.connection_handler
 def comment_answer(cursor, answer_id, message, submission_time, edited_count):
     query = """
@@ -133,6 +135,7 @@ def comment_answer(cursor, answer_id, message, submission_time, edited_count):
 
     args = {'answer_id': answer_id, 'message': message, 'submission_time': submission_time, 'edited_count': edited_count}
     cursor.execute(query, args)
+
 
 # update data
 @databases_common.connection_handler
@@ -170,7 +173,6 @@ def update_answer(cursor, id, message, image, submission_time):
 
 @databases_common.connection_handler
 def update_tags(cursor, tags):
-
     for tag in tags:
         try:
             cursor.execute("""
@@ -180,7 +182,8 @@ def update_tags(cursor, tags):
         except psycopg2.errors.UniqueViolation:
             continue
 
-#delete something
+
+# delete something
 @databases_common.connection_handler
 def delete_question(cursor, question_id):
     cursor.execute("""
@@ -205,6 +208,7 @@ def delete_comment_by_answer(cursor, comment_id):
     cursor.execute("""DELETE FROM comment
                     WHERE comment.id = %(comment_id)s""", {'comment_id': comment_id})
 
+
 @databases_common.connection_handler
 def delete_tag(cursor, question_id, tag_id):
     cursor.execute("""
@@ -213,8 +217,7 @@ def delete_tag(cursor, question_id, tag_id):
                    {"question_id": question_id, "tag_id": tag_id})
 
 
-
-#utility
+# utility
 
 @databases_common.connection_handler
 def change_vote_question(cursor, question_id, vote):
@@ -224,10 +227,11 @@ def change_vote_question(cursor, question_id, vote):
         query = "UPDATE question SET vote_number = vote_number + 1 WHERE question.id = %(question_id)s"
     cursor.execute(query, {"question_id": question_id})
 
+
 @databases_common.connection_handler
 def change_vote_answer(cursor, answer_id, vote):
     if vote == "down":
-        query = "UPDATE answer SET vote_number = vote_number - 1 WHERE answer.id = %(answer_id)s"
+        query = "UPDATE answer SET vote_number = vanswerote_number - 1 WHERE answer.id = %(answer_id)s"
     elif vote == "up":
         query = "UPDATE answer SET vote_number = vote_number + 1 WHERE answer.id = %(answer_id)s"
     cursor.execute(query, {"answer_id": answer_id})
@@ -248,7 +252,7 @@ def get_answers_and_comments(question):
     return answers, comment_of_question, comment_of_answer
 
 
-#search feature
+# search feature
 @databases_common.connection_handler
 def get_searched_question(cursor, search):
     cursor.execute("""
@@ -260,7 +264,7 @@ def get_searched_question(cursor, search):
     return cursor.fetchall()
 
 
-#upload image
+# upload image
 def allowed_file(filename):
     return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
 
@@ -273,6 +277,7 @@ def upload_image():
         filename = secure_filename(file.filename)
         file.save(os.path.join(UPLOAD_FOLDER, filename))
         return filename
+
 
 # tags
 
@@ -301,3 +306,37 @@ def add_tags(cursor, tags, question_id):
         INSERT INTO question_tag (question_id, tag_id)
         VALUES (%(question_id)s, %(id_of_tag)s)""",
                        {'question_id': question_id, 'id_of_tag': id_of_tag['id']})
+
+
+@databases_common.connection_handler
+def change_honor_question(cursor, question_id, vote, ):
+    if vote == "down":
+        query = """
+                UPDATE users_data 
+                SET honor = users_data.honor - 2
+                FROM users_data, question 
+                WHERE question.id = %(question_id)s AND users_data.user_name = question.user_name"""
+    elif vote == "up":
+        query = """
+                UPDATE users_data 
+                SET honor = users_data.honor + 5
+                FROM users_data, question
+                WHERE question.id = %(question_id)s AND users_data.user_name = question.user_name"""
+    cursor.execute(query, {"question_id": question_id})
+
+
+@databases_common.connection_handler
+def change_honor_answer(cursor, answer_id, vote):
+    if vote == "down":
+        query = """ 
+                UPDATE users_data 
+                SET honor = users_data.honor - 2 
+                FROM users_data, answer
+                WHERE answer.id = %(answer_id)s AND users_data.user_name = answer.user_name"""
+    elif vote == "up":
+        query = """
+                UPDATE users_data
+                SET honor = users_data.honor + 10
+                FROM users_data, answer
+                WHERE answer.id = %(answer_id)s AND users_data.user_name = answer.user_name"""
+    cursor.execute(query, {"answer_id": answer_id})
