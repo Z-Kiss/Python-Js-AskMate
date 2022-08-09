@@ -3,12 +3,22 @@
 Register
 {% endblock %}
 {% block content %}
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for msg in messages %}
+                <div class="flash_container">
+                    <div class="flash_message">{{msg}}</div>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
     <div class="form_wrap">
         <form class="forms" action="/login" method="post">
             <label>E-mail</label>
-            <input type="email" name="email" placeholder="Write your email"><br>
+            <input required type="email" name="email" placeholder="Write your email"><br>
             <label>Password</label>
-            <input type="password" name="password" placeholder="Write your password"><br>
-            <button type="submit">Register</button>
+            <input required type="password" name="password" placeholder="Write your password"><br>
+            <button type="submit">Login</button>
         </form>
     </div>
+{% endblock %}

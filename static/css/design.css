@@ -286,4 +286,15 @@ body{
     padding: 20px;
 
 }
-
+.flash_container{
+    display: flex;
+    justify-content: center;
+    align-self: center;
+    justify-self: center;
+}
+.flash_message{
+    background-color: #44CBB1;
+    padding: 20px;
+    margin: 20px;
+    border-style: inset;
+}
