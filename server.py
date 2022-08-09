@@ -1,12 +1,33 @@
 import flask
 import datetime
-from flask import Flask, request, redirect, flash, url_for, render_template
+
+import psycopg2.errors
+from flask import Flask, request, redirect, flash, url_for, render_template,session
 import data_manager
+import user_data_manager
 
 app = Flask(__name__)
 
 
 app.config['SECRET_KEY'] = "francosize"
+
+
+@app.route("/register", methods=['GET', 'POST'])
+def register():
+    if request.method == 'GET':
+        return render_template("register.html")
+    elif request.method == 'POST':
+        username = request.form.get('username')
+        email = request.form.get('email')
+        psw = request.form.get('password')
+        try:
+            user_data_manager.register(username, email, psw)
+        except psycopg2.errors.UniqueViolation:
+            return str(psycopg2.errors.Error)
+        return redirect("/")
+
+
+
 
 
 @app.route("/")
