@@ -27,8 +27,10 @@ def register():
         return redirect("/register")
 
 
-@app.route("/login")
+@app.route("/login", methods= ['POST'])
 def login():
+    email = request.form.get('email')
+
 
 
 
