@@ -3,8 +3,16 @@
 Register
 {% endblock %}
 {% block content %}
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for msg in messages %}
+                <p p style="color:#FF0000">{{msg}}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
     <div class="form_wrap">
         <form class="forms" action="/register" method="post">
+
             <label>Username</label>
             <input type="text" name="username" placeholder="Write your username"><br>
             <label>E-mail</label>
