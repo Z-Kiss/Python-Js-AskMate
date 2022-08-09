@@ -1,10 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends 'layout.html' %}
+{% block page_title %}
+Register
+{% endblock %}
+{% block content %}
+    <div class="form_wrap">
+        <form class="forms" action="/login" method="post">
+            <label>E-mail</label>
+            <input type="email" name="email" placeholder="Write your email"><br>
+            <label>Password</label>
+            <input type="password" name="password" placeholder="Write your password"><br>
+            <button type="submit">Register</button>
+        </form>
+    </div>

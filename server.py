@@ -23,8 +23,17 @@ def register():
         try:
             user_data_manager.register(username, email, psw)
         except psycopg2.errors.UniqueViolation:
-            return str(psycopg2.errors.Error)
-        return redirect("/")
+            flash('bad')
+        return redirect("/register")
+
+
+@app.route("/login")
+def login():
+
+
+
+
+
 
 
 
@@ -32,10 +41,12 @@ def register():
 
 @app.route("/")
 def short_five_latest():
-    title = 'Five recent Questions'
-    questions = data_manager.show_five_latest()
-    tags = [data_manager.get_tags_for_question(question['id']) for question in questions]
-    return render_template("show_all_question.html", questions=questions, tags=tags, title=title)
+    if 'username' not in session:
+        return render_template('login.html')
+    else:
+        questions = data_manager.show_five_latest()
+        tags = [data_manager.get_tags_for_question(question['id']) for question in questions]
+        return render_template("show_all_question.html", questions=questions, tags=tags)
 
 @app.route("/list")
 def show_all_questions():
