@@ -32,10 +32,12 @@ def get_user_data_by_email(cursor, email):
 @databases_common.connection_handler
 def list_all_users(cursor):
     query = """
-            SELECT users_data.*, COUNT(question.id) as "Number of questions"
+            SELECT users_data.*, COUNT(question.id) as "Number of questions", COUNT(answer.id) as "Number of answers"
             FROM users_data
             INNER JOIN question
                 ON users_data."id " = question.user_id
+            INNER JOIN  answer
+                ON users_data."id " = answer.user_id
             group by users_data."id ";"""
     cursor.execute(query)
     return cursor.fetchall()
