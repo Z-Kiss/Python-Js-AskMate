@@ -20,11 +20,12 @@ def register():
         username = request.form.get('username')
         email = request.form.get('email')
         psw = request.form.get('password')
+        time = datetime.datetime.now()
         try:
-            user_data_manager.register(username, email, psw)
+            user_data_manager.register(username, email, psw, time)
         except psycopg2.errors.UniqueViolation:
             flash('Username or Email already in use!')
-        return redirect("/register")
+        return redirect("/login")
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -66,17 +67,16 @@ def short_five_latest():
     return render_template("show_all_question.html", questions=questions, tags=tags, user='Hi ' + session['username'])
 
 
-@app.route("/list")
+@app.route("/list", methods=['GET','POST'])
 def show_all_questions():
-    title = 'All questions'
-    order_by = request.args.get('order_by')
-    order_direction = request.args.get('order_direction')
-    if order_by and order_direction:
-        questions = data_manager.show_all_question(order_by, order_direction)
-    else:
+    if request.method == 'GET':
         questions = data_manager.show_all_question()
+    elif request.method == 'POST':
+        order_by = request.form.get('order_by')
+        order_direction = request.form.get('order_direction')
+        questions = data_manager.show_all_question(order_by, order_direction)
     tags = [data_manager.get_tags_for_question(question['id']) for question in questions]
-    return flask.render_template("show_all_question.html", questions=questions, tags=tags, title=title, user='Hi ' + session['username'])
+    return flask.render_template("show_all_question.html", questions=questions, tags=tags)
 
 
 @app.route("/question/<question_id>")
