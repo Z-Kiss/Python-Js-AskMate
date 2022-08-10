@@ -1,5 +1,5 @@
 import databases_common
-from flask import  session
+from flask import session
 
 import utils
 
@@ -40,7 +40,7 @@ def update_honor_question(cursor, user_name, vote):
 
 
 @databases_common.connection_handler
-def update_honor_answer(cursor, user_name, vote):
+def update_honor_answer(cursor, user_name, vote="accept"):
     if vote == "down":
         query = """
                 UPDATE users_data 
@@ -51,6 +51,12 @@ def update_honor_answer(cursor, user_name, vote):
                 UPDATE users_data
                 SET honor = honor + 10
                 WHERE users_data.user_name = %(user_name)s"""
+    else:
+        query = """
+                UPDATE users_data
+                SET honor = honor + 15
+                WHERE users_data.user_name = %(user_name)s"""
+
     cursor.execute(query, {"user_name": user_name})
 
 
@@ -63,6 +69,7 @@ def select_name_by_question(cursor, question_id):
                    {'id': question_id})
     return cursor.fetchone()
 
+
 @databases_common.connection_handler
 def select_name_by_answer(cursor, answer_id):
     cursor.execute("""
@@ -71,6 +78,7 @@ def select_name_by_answer(cursor, answer_id):
             WHERE id = %(id)s""",
                    {'id': answer_id})
     return cursor.fetchone()
+
 
 @databases_common.connection_handler
 def get_honor_by_username(cursor):

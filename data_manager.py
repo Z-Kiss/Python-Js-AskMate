@@ -120,7 +120,6 @@ def add_comment(cursor, question_id, message, submission_time, edited_count=0):
 # add data corresponding something
 @databases_common.connection_handler
 def comment_answer(cursor, answer_id, message, submission_time):
-
     query = """
             INSERT INTO comment (user_name, answer_id, message,submission_time,edited_count)
             VALUES (%(name)s, %(answer_id)s,%(message)s,%(submission_time)s, 0)
@@ -301,3 +300,11 @@ def add_tags(cursor, tags, question_id):
         VALUES (%(question_id)s, %(id_of_tag)s)""",
                        {'question_id': question_id, 'id_of_tag': id_of_tag['id']})
 
+
+@databases_common.connection_handler
+def accept_answer(cursor, answer_id):
+    cursor.execute("""
+            UPDATE answer
+            SET accept = true
+            WHERE answer.id == %(anser_id)s""",
+                   {"answer_id": answer_id})

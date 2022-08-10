@@ -248,5 +248,12 @@ def delete_tag(question_id, tag_id):
     return redirect(url_for("show_question", question_id=question_id, view="no"))
 
 
+@app.route('/accept/<answer_id>/<user_name>/<question_id>')
+def accept_answer(answer_id, user_name, question_id):
+    data_manager.accept_answer(answer_id)
+    user_data_manager.update_honor_answer(user_name)
+    return redirect(url_for("show_question", question_id=question_id))
+
+
 if __name__ == '__main__':
     app.run(debug=True)
