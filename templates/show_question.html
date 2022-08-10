@@ -84,6 +84,9 @@
     {% if answers %}
 
         {% for answer in answers %}
+            {% if question.user_name == session.username and answer.user_name != question.user_name %}
+                <div class="answer_button"><a href="/accept/{{ answer.id }}"></a><button>Accept answer</button></div>
+            {% endif %}
         <div class="answer_wrapper">
 
             <div class="answer_content">

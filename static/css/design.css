@@ -339,3 +339,9 @@ body{
     justify-content: center;
     align-items: center;
 }
+.answer_button{
+    margin-right: 150px;
+    display: flex;
+    justify-self: flex-end;
+    align-self: flex-end;
+}
