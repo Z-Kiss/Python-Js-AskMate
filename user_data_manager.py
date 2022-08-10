@@ -1,11 +1,5 @@
-import os
-
-import psycopg2.errors
-from psycopg2 import sql
-from werkzeug.utils import secure_filename
-
 import databases_common
-from flask import request
+from flask import  session
 
 import utils
 
@@ -61,18 +55,27 @@ def update_honor_answer(cursor, user_name, vote):
 
 
 @databases_common.connection_handler
-def select_name_by_question(question_id, cursor):
+def select_name_by_question(cursor, question_id):
     cursor.execute("""
-            SELECT user_name 
+            SELECT question.user_name
             FROM question
-            WHERE id = %(question_id)s""",
+            WHERE question.id = %(id)s""",
                    {'id': question_id})
-
+    return cursor.fetchone()
 
 @databases_common.connection_handler
-def select_name_by_answer(answer_id, cursor):
+def select_name_by_answer(cursor, answer_id):
     cursor.execute("""
             SELECT user_name 
             FROM answer
-            WHERE id = %(answer_id)s""",
+            WHERE id = %(id)s""",
                    {'id': answer_id})
+    return cursor.fetchone()
+
+@databases_common.connection_handler
+def get_honor_by_username(cursor):
+    cursor.execute("""
+    SELECT honor FROM users_data
+    WHERE user_name = %(name)s""",
+                   {'name': session['username']})
+    return cursor.fetchone()

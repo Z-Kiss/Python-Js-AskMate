@@ -39,6 +39,7 @@ def login():
             if utils.verify_password(psw, user_data['password']):
                 session['username'] = user_data['user_name']
                 session['role'] = user_data['role']
+                session['honor'] = user_data['honor']
                 return redirect('/')
             else:
                 flash('Incorrect Password/email')
@@ -192,7 +193,9 @@ def edit_comment(comment_id, question_id):
 @app.route("/question/<question_id>/vote/<type_of_vote>")
 def vote_question(question_id, type_of_vote):
     user_name = user_data_manager.select_name_by_question(question_id)
-    user_data_manager.update_honor_question(user_name, type_of_vote)
+    user_data_manager.update_honor_question(user_name['user_name'], type_of_vote)
+    honor = user_data_manager.get_honor_by_username()
+    session['honor'] = honor['honor']
     data_manager.change_vote_question(question_id, type_of_vote)
     return redirect(url_for("show_question", question_id=question_id))
 
@@ -200,9 +203,11 @@ def vote_question(question_id, type_of_vote):
 @app.route("/answer/<answer_id>/vote/<type_of_vote>/<question_id>")
 def vote_answer(answer_id, type_of_vote, question_id):
     user_name = user_data_manager.select_name_by_answer(answer_id)
-    user_data_manager.update_honor_answer(user_name, type_of_vote)
+    user_data_manager.update_honor_answer(user_name['user_name'], type_of_vote)
+    honor = user_data_manager.get_honor_by_username()
+    session['honor'] = honor['honor']
     data_manager.change_vote_answer(answer_id, type_of_vote)
-    return redirect("show_question", question_id)
+    return redirect(url_for("show_question", question_id=question_id))
 
 
 @app.route("/question/search", methods=['GET', 'POST'])
