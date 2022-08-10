@@ -58,6 +58,7 @@ def logout():
         flash(f"You have been logged out {username}")
         return redirect("/")
 
+
 @app.route("/")
 def short_five_latest():
     if 'username' not in session:
@@ -65,6 +66,7 @@ def short_five_latest():
     questions = data_manager.show_five_latest()
     tags = [data_manager.get_tags_for_question(question['id']) for question in questions]
     return render_template("show_all_question.html", questions=questions, tags=tags, user='Hi ' + session['username'])
+
 
 @app.route("/list", methods=['GET','POST'])
 def show_all_questions():
@@ -76,8 +78,6 @@ def show_all_questions():
         questions = data_manager.show_all_question(order_by, order_direction)
     tags = [data_manager.get_tags_for_question(question['id']) for question in questions]
     return flask.render_template("show_all_question.html", questions=questions, tags=tags)
-
-
 
 
 @app.route("/question/<question_id>")
@@ -191,18 +191,18 @@ def edit_comment(comment_id, question_id):
 
 @app.route("/question/<question_id>/vote/<type_of_vote>")
 def vote_question(question_id, type_of_vote):
-
+    user_name = user_data_manager.select_name_by_question(question_id)
     user_data_manager.update_honor_question(user_name, type_of_vote)
-    session['honor'] =
     data_manager.change_vote_question(question_id, type_of_vote)
-    return redirect(url_for("show_question", question_id=question_id,  view="no"))
+    return redirect(url_for("show_question", question_id=question_id))
 
 
 @app.route("/answer/<answer_id>/vote/<type_of_vote>/<question_id>")
 def vote_answer(answer_id, type_of_vote, question_id):
+    user_name = user_data_manager.select_name_by_answer(answer_id)
     user_data_manager.update_honor_answer(user_name, type_of_vote)
     data_manager.change_vote_answer(answer_id, type_of_vote)
-    return redirect(url_for("show_question", question_id=question_id,  view="no"))
+    return redirect("show_question", question_id)
 
 
 @app.route("/question/search", methods=['GET', 'POST'])

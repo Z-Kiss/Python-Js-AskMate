@@ -225,7 +225,7 @@ def change_vote_question(cursor, question_id, vote):
 @databases_common.connection_handler
 def change_vote_answer(cursor, answer_id, vote):
     if vote == "down":
-        query = "UPDATE answer SET vote_number = vanswerote_number - 1 WHERE answer.id = %(answer_id)s"
+        query = "UPDATE answer SET vote_number = vote_number - 1 WHERE answer.id = %(answer_id)s"
     elif vote == "up":
         query = "UPDATE answer SET vote_number = vote_number + 1 WHERE answer.id = %(answer_id)s"
     cursor.execute(query, {"answer_id": answer_id})
@@ -300,5 +300,4 @@ def add_tags(cursor, tags, question_id):
         INSERT INTO question_tag (question_id, tag_id)
         VALUES (%(question_id)s, %(id_of_tag)s)""",
                        {'question_id': question_id, 'id_of_tag': id_of_tag['id']})
-
 
