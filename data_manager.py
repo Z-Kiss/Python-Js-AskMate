@@ -102,32 +102,33 @@ def add_question(cursor, title, message, time, image):
 @databases_common.connection_handler
 def add_answer(cursor, message, time, question_id):
     cursor.execute("""
-    INSERT INTO answer(user_name, submission_time, vote_number, message, question_id)
-    VALUES( %(name)s, %(time)s, 0, %(message)s, %(question_id)s )""",
+    INSERT INTO answer(user_name, submission_time, vote_number, question_id, message)
+    VALUES( %(name)s, %(time)s, 0, %(question_id)s, %(message)s )""",
                    {'name': session['username'], 'time': time, 'message': message, 'question_id': question_id})
 
 
 @databases_common.connection_handler
 def add_comment(cursor, question_id, message, submission_time, edited_count=0):
     query = """
-                INSERT INTO comment (question_id, message, submission_time, edited_count)
-                VALUES (%(question_id)s, %(message)s, %(submission_time)s, %(edited_count)s)
+                INSERT INTO comment (user_name, question_id, message, submission_time, edited_count)
+                VALUES (%(name)s, %(question_id)s, %(message)s, %(submission_time)s, %(edited_count)s)
                 """
-    args = {'question_id': question_id, 'message': message,
+    args = {'name': session['username'], 'question_id': question_id, 'message': message,
             'submission_time': submission_time, 'edited_count': edited_count
             }
     cursor.execute(query, args)
 
 #add data corresponding something
 @databases_common.connection_handler
-def comment_answer(cursor, answer_id, message, submission_time, edited_count):
+def comment_answer(cursor, answer_id, message, submission_time):
+
     query = """
-            INSERT INTO comment (answer_id, message,submission_time,edited_count)
-            VALUES (%(answer_id)s,%(message)s,%(submission_time)s,%(edited_count)s)
+            INSERT INTO comment (user_name, answer_id, message,submission_time,edited_count)
+            VALUES (%(name)s, %(answer_id)s,%(message)s,%(submission_time)s, 0)
             RETURNING id;
             """
 
-    args = {'answer_id': answer_id, 'message': message, 'submission_time': submission_time, 'edited_count': edited_count}
+    args = {'name': session['username'], 'answer_id': answer_id, 'message': message, 'submission_time': submission_time}
     cursor.execute(query, args)
 
 # update data

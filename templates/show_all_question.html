@@ -11,12 +11,17 @@
 
     {%  block content %}
         <div class="form_wrap">
-            <form class="form_wrap" action="/list" method="post">
+            <form class="form_wrap" action="/list" method="POST">
                 <select name="order_by" id="">
-                    <option value="submission_time">Created</option>
-                    <option value="vote_number"></option>
-                    <option value="title"></option>
+                    <option value="submission_time">Time</option>
+                    <option value="vote_number">Vote</option>
+                    <option value="title">Title</option>
                 </select>
+                 <select name="order_direction" id="">
+                    <option value="ASC">Ascending</option>
+                    <option value="DESC">Descending</option>
+                </select>
+                <button type="submit"> Order</button>
             </form>
         </div>
 

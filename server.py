@@ -130,7 +130,7 @@ def add_answer(question_id):
         time = datetime.datetime.now()
         vote = 0
         message = request.form.get('message')
-        data_manager.add_answer(message, time, question_id, vote)
+        data_manager.add_answer(message, time, question_id)
         return redirect(url_for('show_question', question_id=question_id))
     elif request.method == 'GET':
         return render_template('answer.html', requested_answer=None, question_id=question_id)
@@ -152,8 +152,7 @@ def new_comment_answer(answer_id, question_id):
     if request.method == 'POST':
         message = request.form.get('message')
         submission_time = datetime.datetime.now()
-        edited_count = 0
-        data_manager.comment_answer(answer_id, message, submission_time, edited_count)
+        data_manager.comment_answer(answer_id, message, submission_time)
         return redirect(url_for('show_question', question_id=question_id))
     return render_template('add_comment.html', answer_id=answer_id, question_id=question_id)
 
