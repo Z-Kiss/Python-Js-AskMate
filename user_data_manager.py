@@ -40,7 +40,7 @@ def update_honor_question(cursor, user_name, vote):
 
 
 @databases_common.connection_handler
-def update_honor_answer(cursor, user_name, vote="accept"):
+def update_honor_answer(cursor, user_name, vote):
     if vote == "down":
         query = """
                 UPDATE users_data 
@@ -51,11 +51,16 @@ def update_honor_answer(cursor, user_name, vote="accept"):
                 UPDATE users_data
                 SET honor = honor + 10
                 WHERE users_data.user_name = %(user_name)s"""
-    else:
+    elif vote == 'accept':
         query = """
                 UPDATE users_data
                 SET honor = honor + 15
                 WHERE users_data.user_name = %(user_name)s"""
+    elif vote == 'reject':
+        query = """
+                    UPDATE users_data
+                    SET honor = honor - 15
+                    WHERE users_data.user_name = %(user_name)s"""
 
     cursor.execute(query, {"user_name": user_name})
 

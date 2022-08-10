@@ -85,10 +85,17 @@
 
         {% for answer in answers %}
             {% if question.user_name == session.username and answer.user_name != question.user_name %}
-                <div class="answer_button"><a href="/accept/{{ answer.id }}/{{ answers.user_name }}/{{ question.id }}"></a><button>Accept answer</button></div>
+                {% if answer.accepted == false %}
+                <div class="answer_button"><a href="/accept/{{ answer.id }}/{{ answer.user_name }}/{{ question.id }}"><button>Accept answer</button></a></div>
+                    {% else %}
+                <div class="answer_button"><a href="/reject/{{ answer.id }}/{{ answer.user_name }}/{{ question.id }}"><button>Reject answer</button></a></div>
+                {% endif %}
             {% endif %}
+        {% if answer.accepted == false %}
         <div class="answer_wrapper">
-
+        {% else %}
+        <div class="answer_wrapper_accepted">
+        {% endif %}
             <div class="answer_content">
 
                <div class="answer_body">

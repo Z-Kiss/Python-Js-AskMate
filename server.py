@@ -251,7 +251,13 @@ def delete_tag(question_id, tag_id):
 @app.route('/accept/<answer_id>/<user_name>/<question_id>')
 def accept_answer(answer_id, user_name, question_id):
     data_manager.accept_answer(answer_id)
-    user_data_manager.update_honor_answer(user_name)
+    user_data_manager.update_honor_answer(user_name, 'accept')
+    return redirect(url_for("show_question", question_id=question_id))
+
+@app.route('/reject/<answer_id>/<user_name>/<question_id>')
+def reject_answer(answer_id, user_name, question_id):
+    data_manager.reject_answer(answer_id)
+    user_data_manager.update_honor_answer(user_name, 'reject')
     return redirect(url_for("show_question", question_id=question_id))
 
 

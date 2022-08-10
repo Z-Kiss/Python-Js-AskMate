@@ -305,6 +305,14 @@ def add_tags(cursor, tags, question_id):
 def accept_answer(cursor, answer_id):
     cursor.execute("""
             UPDATE answer
-            SET accept = true
-            WHERE answer.id == %(anser_id)s""",
+            SET accepted = true
+            WHERE answer.id = %(answer_id)s""",
+                   {"answer_id": answer_id})
+
+@databases_common.connection_handler
+def reject_answer(cursor, answer_id):
+    cursor.execute("""
+            UPDATE answer
+            SET accepted = false
+            WHERE answer.id = %(answer_id)s""",
                    {"answer_id": answer_id})
