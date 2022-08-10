@@ -1,10 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
+    <head>
+        <meta charset="UTF-8">
+        <title> Login Page - Ask Máté</title>
+        <link rel="stylesheet" href="/static/css/design.css">
+
+    </head>
+    <body>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for msg in messages %}
+                <div class="flash_container">
+                    <div class="flash_message">{{msg}}</div>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    <div class="login_wrap">
+        <form class="forms" action="/register" method="post">
+
+            <label>Username</label>
+            <input required type="text" name="username" placeholder="Write your username"><br>
+            <label>E-mail</label>
+            <input required type="email" name="email" placeholder="Write your email"><br>
+            <label>Password</label>
+            <input required type="password" name="password" placeholder="Write your password"><br>
+            <button type="submit">Register</button>
+            <br>
+            <div style="align-self: center"><a href="/login"><button type="button">Login</button></a></div>
+        </form>
+    </div>
+
+    </body>
 </html>
+
