@@ -237,5 +237,16 @@ def delete_tag(question_id, tag_id):
     data_manager.delete_tag(question_id, tag_id)
     return redirect(url_for("show_question", question_id=question_id, view="no"))
 
+
+@app.route('/users')
+def list_users():
+    if 'username' in session:
+        users = user_data_manager.list_all_users()
+        print(users)
+        #headers = dict(users[0])
+        return render_template('users_list.html', users=users)
+    return redirect(url_for('login'))
+
+
 if __name__ == '__main__':
     app.run(debug=True)
