@@ -80,7 +80,7 @@ def show_all_questions():
 
 
 
-@app.route("/<user_name>/question/<question_id>")
+@app.route("/question/<question_id>")
 def show_question(question_id):
     if request.args.get('view') != "no":
         data_manager.increase_view(question_id)
