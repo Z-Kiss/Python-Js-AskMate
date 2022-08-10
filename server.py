@@ -2,13 +2,12 @@ import flask
 import datetime
 
 import psycopg2.errors
-from flask import Flask, request, redirect, flash, url_for, render_template,session
+from flask import Flask, request, redirect, flash, url_for, render_template, session
 import data_manager
 import user_data_manager
 import utils
 
 app = Flask(__name__)
-
 
 app.config['SECRET_KEY'] = "francosize"
 
@@ -57,6 +56,7 @@ def logout():
         flash(f"You have been logged out {username}")
         return redirect("/")
 
+
 @app.route("/")
 def short_five_latest():
     if 'username' not in session:
@@ -64,6 +64,7 @@ def short_five_latest():
     questions = data_manager.show_five_latest()
     tags = [data_manager.get_tags_for_question(question['id']) for question in questions]
     return render_template("show_all_question.html", questions=questions, tags=tags, user='Hi ' + session['username'])
+
 
 @app.route("/list")
 def show_all_questions():
@@ -78,7 +79,7 @@ def show_all_questions():
     return flask.render_template("show_all_question.html", questions=questions, tags=tags, title=title, user='Hi ' + session['username'])
 
 
-@app.route("/<user_name>/question/<question_id>")
+@app.route("/question/<question_id>")
 def show_question(question_id):
     if request.args.get('view') != "no":
         data_manager.increase_view(question_id)
@@ -87,7 +88,7 @@ def show_question(question_id):
     tags = data_manager.get_tags_for_question(question_id)
     return flask.render_template("show_question.html", question=question, tags=tags,
                                  comment_of_question=comment_of_question, answers=answers,
-                                 comment_of_answer=comment_of_answer, user='Hi ' + session['username'] )
+                                 comment_of_answer=comment_of_answer, user='Hi ' + session['username'])
 
 
 @app.route("/delete/question/<question_id>")
@@ -191,18 +192,18 @@ def edit_comment(comment_id, question_id):
 
 @app.route("/question/<question_id>/vote/<type_of_vote>")
 def vote_question(question_id, type_of_vote):
-    user_name = session['username']
-    data_manager.update_honor_question(user_name, type_of_vote)
+    user_name = user_data_manager.select_name_by_question(question_id)
+    user_data_manager.update_honor_question(user_name, type_of_vote)
     data_manager.change_vote_question(question_id, type_of_vote)
-    return redirect(url_for("show_question", question_id=question_id, user_name=user_name, view="no"))
+    return redirect(url_for("show_question", question_id=question_id))
 
 
 @app.route("/answer/<answer_id>/vote/<type_of_vote>/<question_id>")
 def vote_answer(answer_id, type_of_vote, question_id):
-    user_name = session['username']
-    data_manager.update_honor_answer(user_name, type_of_vote)
+    user_name = user_data_manager.select_name_by_answer(answer_id)
+    user_data_manager.update_honor_answer(user_name, type_of_vote)
     data_manager.change_vote_answer(answer_id, type_of_vote)
-    return redirect(url_for("show_question", question_id=question_id, user_name=user_name, view="no"))
+    return redirect("show_question", question_id)
 
 
 @app.route("/question/search", methods=['GET', 'POST'])

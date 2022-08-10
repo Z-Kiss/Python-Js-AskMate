@@ -231,7 +231,7 @@ def change_vote_question(cursor, question_id, vote):
 @databases_common.connection_handler
 def change_vote_answer(cursor, answer_id, vote):
     if vote == "down":
-        query = "UPDATE answer SET vote_number = vanswerote_number - 1 WHERE answer.id = %(answer_id)s"
+        query = "UPDATE answer SET vote_number = vote_number - 1 WHERE answer.id = %(answer_id)s"
     elif vote == "up":
         query = "UPDATE answer SET vote_number = vote_number + 1 WHERE answer.id = %(answer_id)s"
     cursor.execute(query, {"answer_id": answer_id})
@@ -307,32 +307,3 @@ def add_tags(cursor, tags, question_id):
         VALUES (%(question_id)s, %(id_of_tag)s)""",
                        {'question_id': question_id, 'id_of_tag': id_of_tag['id']})
 
-
-@databases_common.connection_handler
-def update_honor_question(cursor, user_name, vote, ):
-    if vote == "down":
-        query = """
-                UPDATE users_data 
-                SET honor = honor - 2 
-                WHERE users_data.user_name = %(user_name)s"""
-    elif vote == "up":
-        query = """
-                UPDATE users_data 
-                SET honor = honor + 5
-                WHERE users_data.user_name = %(user_name)s"""
-    cursor.execute(query, {"user_name": user_name})
-
-
-@databases_common.connection_handler
-def update_honor_answer(cursor, user_name, vote):
-    if vote == "down":
-        query = """
-                UPDATE users_data 
-                SET honor = honor - 2 
-                WHERE users_data.user_name = %(user_name)s"""
-    elif vote == "up":
-        query = """
-                UPDATE users_data
-                SET honor = honor + 10
-                WHERE users_data.user_name = %(user_name)s"""
-    cursor.execute(query, {"user_name": user_name})
