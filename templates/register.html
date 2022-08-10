@@ -8,15 +8,6 @@
     </head>
     <body>
 
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            {% for msg in messages %}
-                <div class="flash_container">
-                    <div class="flash_message">{{msg}}</div>
-                </div>
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
     <div class="login_wrap">
         <form class="forms" action="/register" method="post">
 
@@ -31,7 +22,15 @@
             <div style="align-self: center"><a href="/login"><button type="button">Login</button></a></div>
         </form>
     </div>
-
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for msg in messages %}
+                <div class="flash_container">
+                    <div class="flash_message">{{msg}}</div>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
     </body>
 </html>
 
