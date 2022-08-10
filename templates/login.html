@@ -7,15 +7,7 @@
 
     </head>
     <body>
-            {% with messages = get_flashed_messages() %}
-                {% if messages %}
-                    {% for msg in messages %}
-                        <div class="flash_container">
-                            <div class="flash_message">{{msg}}</div>
-                        </div>
-                    {% endfor %}
-                {% endif %}
-            {% endwith %}
+
             <div class="login_wrap">
                 <form class="forms" action="/login" method="post">
                     <label>E-mail</label>
@@ -28,5 +20,14 @@
                 </form>
 
             </div>
+    {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    {% for msg in messages %}
+                        <div class="flash_container">
+                            <div class="flash_message">{{msg}}</div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
     </body>
 </html>
