@@ -7,26 +7,27 @@
 
     </head>
     <body>
-       <div class="header_container">
-     <div class="header">
-         <div id="nav_buttons" >
-             <div id="logo"><a  href="/" ><img  src="/static/image/logo1.jpg" alt="logo" width="120px" height="120px"></a></div>
-
-                     <div class="header_nav">
-                         <div id="nav_but_1"><a href="/list">Show all questions</a> </div>
-                         <div id="nav_but_2"><a href="/question/search">Search</a> </div>
-                         <div id="nav_but_3"><a href="/add-question">Ask Something from Máté</a> </div>
-                    </div>
-                    <div class="user_buttons">
-                        <div>Hy {% block user %}{% endblock %}</div>
-                        <div><button>check profile</button></div>
-                        <div><button>check quetions</button></div>
-                        <div><a href="/logout"><button>Logout</button></a></div>
-                    </div>
-             <div id="logo"><a  href="/" ><img  src="/static/image/logo1.jpg" alt="logo" width="120px" height="120px"></a></div>
-         </div>
-     </div>
-</div>
+        <div class="header_container">
+            <div class="header">
+                <div id="nav_buttons" >
+                    <div id="logo"><img  src="/static/image/logo1.jpg" alt="logo" width="120px" height="120px"></div>
+                    {% if user %}
+                             <div class="header_nav">
+                                 <div id="nav_but_1"><a href="/list">Show all questions</a> </div>
+                                 <div id="nav_but_2"><a href="/question/search">Search</a> </div>
+                                 <div id="nav_but_3"><a href="/add-question">Ask Something from Máté</a> </div>
+                            </div>
+                            <div class="user_buttons">
+                                <div>{% block user %} {{ user }} {% endblock %}</div>
+                                <div><button>check profile</button></div>
+                                <div><button>check quetions</button></div>
+                                <div><a href="/logout"><button>Logout</button></a></div>
+                            </div>
+                    {% endif %}
+                    <div id="logo"><img  src="/static/image/logo1.jpg" alt="logo" width="120px" height="120px"></div>
+                </div>
+            </div>
+        </div>
         {% block content %}
         {% endblock %}
     {% include 'footer.html' %}

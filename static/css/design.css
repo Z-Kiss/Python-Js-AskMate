@@ -332,3 +332,10 @@ body{
 .user_buttons{
     gap: 10px
 }
+
+.login_wrap{
+    height: 500px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

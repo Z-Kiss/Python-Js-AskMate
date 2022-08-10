@@ -25,7 +25,7 @@ def register():
             user_data_manager.register(username, email, psw)
         except psycopg2.errors.UniqueViolation:
             flash('Username or Email already in use!')
-        return redirect("/login")
+        return redirect("/register")
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -40,10 +40,10 @@ def login():
                 session['role'] = user_data['role']
                 return redirect('/')
             else:
-                flash('Bad password')
+                flash('Incorrect Password/email')
                 return redirect('/login')
         else:
-            flash('Bad Email')
+            flash('Incorrect Password/Email')
             return redirect('/login')
     elif request.method == 'GET':
         return render_template('login.html')
@@ -63,7 +63,7 @@ def short_five_latest():
         return redirect('/login')
     questions = data_manager.show_five_latest()
     tags = [data_manager.get_tags_for_question(question['id']) for question in questions]
-    return render_template("show_all_question.html", questions=questions, tags=tags, user=session['username'])
+    return render_template("show_all_question.html", questions=questions, tags=tags, user='Hi ' + session['username'])
 
 @app.route("/list")
 def show_all_questions():
