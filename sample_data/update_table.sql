@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS users_data;
 create table users_data
 (
     "id "     serial
@@ -7,7 +8,8 @@ create table users_data
     email     varchar not null,
     password  varchar not null,
     honor     int,
-    role      varchar not null
+    role      varchar not null,
+    submission_time timestamp without time zone
 );
 
 create unique index users_data_email_uindex

@@ -21,11 +21,12 @@ def register():
         username = request.form.get('username')
         email = request.form.get('email')
         psw = request.form.get('password')
+        time = datetime.datetime.now()
         try:
-            user_data_manager.register(username, email, psw)
+            user_data_manager.register(username, email, psw, time)
         except psycopg2.errors.UniqueViolation:
             flash('Username or Email already in use!')
-        return redirect("/register")
+        return redirect("/login")
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -203,7 +204,7 @@ def vote_answer(answer_id, type_of_vote, question_id):
 @app.route("/question/search", methods=['GET', 'POST'])
 def search_question():
     if request.method == 'GET':
-        return flask.render_template("search_result.html", questions=None)
+        return flask.render_template("search_result.html", questions=None, user='Hi ' + session['username'])
     elif request.method == 'POST':
         search = request.form.get('search')
         questions = data_manager.get_searched_question(search)
