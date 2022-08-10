@@ -11,13 +11,13 @@ import utils
 
 
 @databases_common.connection_handler
-def register(cursor, username, email, password):
+def register(cursor, username, email, password, time):
     password = utils.hash_password(password)
     query = """
-            INSERT INTO users_data (user_name, email, password, honor, role)
-            VALUES ( %(user_name)s, %(email)s, %(password)s, 0, 1)
+            INSERT INTO users_data (user_name, email, password, honor, role, registration_date)
+            VALUES ( %(user_name)s, %(email)s, %(password)s, 0, 1, %(time)s)
             """
-    args = {'user_name': username, 'email': email, 'password': password}
+    args = {'user_name': username, 'email': email, 'password': password, 'time': time}
     cursor.execute(query, args)
 
 @databases_common.connection_handler
