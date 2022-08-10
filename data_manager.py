@@ -300,6 +300,13 @@ def add_tags(cursor, tags, question_id):
         VALUES (%(question_id)s, %(id_of_tag)s)""",
                        {'question_id': question_id, 'id_of_tag': id_of_tag['id']})
 
+@databases_common.connection_handler
+def get_all_tags(cursor):
+    cursor.execute("""
+    SELECT tag.name, COUNT(question_id) as q_count FROM tag
+    join question_tag qt on tag.id = qt.tag_id
+    GROUP BY  tag.name""")
+    return cursor.fetchall()
 
 @databases_common.connection_handler
 def accept_answer(cursor, answer_id):

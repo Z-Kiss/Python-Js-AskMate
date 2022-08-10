@@ -61,7 +61,7 @@ CREATE TABLE question_tag (
 DROP TABLE IF EXISTS public.tag;
 CREATE TABLE tag (
     id serial NOT NULL,
-    name text
+    name text UNIQUE
 );
 
 

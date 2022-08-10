@@ -120,7 +120,7 @@ def add_tag(question_id):
     if request.method == 'GET':
         return render_template('add_tag.html', question_id=question_id)
     elif request.method == 'POST':
-        tags = request.form.get('tag').split()
+        tags = set(request.form.get('tag').split())
         data_manager.update_tags(tags)
         data_manager.add_tags(tags, question_id)
         return redirect(url_for('show_question', question_id=question_id))
@@ -260,6 +260,10 @@ def reject_answer(answer_id, user_name, question_id):
     user_data_manager.update_honor_answer(user_name, 'reject')
     return redirect(url_for("show_question", question_id=question_id))
 
+@app.route('/tags')
+def show_tags():
+    tags = data_manager.get_all_tags()
+    return render_template('tags.html', tags=tags)
 
 if __name__ == '__main__':
     app.run(debug=True)
