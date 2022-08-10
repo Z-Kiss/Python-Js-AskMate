@@ -71,8 +71,8 @@ def show_all_questions():
     if request.method == 'GET':
         questions = data_manager.show_all_question()
     elif request.method == 'POST':
-        order_by = request.args.get('order_by')
-        order_direction = request.args.get('order_direction')
+        order_by = request.form.get('order_by')
+        order_direction = request.form.get('order_direction')
         questions = data_manager.show_all_question(order_by, order_direction)
     tags = [data_manager.get_tags_for_question(question['id']) for question in questions]
     return flask.render_template("show_all_question.html", questions=questions, tags=tags)
@@ -128,7 +128,6 @@ def add_tag(question_id):
 def add_answer(question_id):
     if request.method == 'POST':
         time = datetime.datetime.now()
-        vote = 0
         message = request.form.get('message')
         data_manager.add_answer(message, time, question_id)
         return redirect(url_for('show_question', question_id=question_id))

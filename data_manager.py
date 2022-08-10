@@ -17,10 +17,7 @@ UPLOAD_FOLDER = 'static/image/'
 
 @databases_common.connection_handler
 def show_all_question(cursor, order_by='submission_time', order_direction='desc'):
-    if order_direction in ['asc', 'desc']:
-        query = sql.SQL("SELECT * FROM question ORDER BY {} {};").format(sql.Identifier(order_by), sql.SQL(order_direction))
-    else:
-        raise Exception()
+    query = sql.SQL("SELECT * FROM question ORDER BY {} {};").format(sql.Identifier(order_by), sql.SQL(order_direction))
     cursor.execute(query)
     return cursor.fetchall()
 
