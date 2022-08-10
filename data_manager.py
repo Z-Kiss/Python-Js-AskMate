@@ -5,7 +5,7 @@ from psycopg2 import sql
 from werkzeug.utils import secure_filename
 
 import databases_common
-from flask import request
+from flask import request, session
 
 ALLOWED_EXTENSIONS = {"jpg", "png"}
 
@@ -88,27 +88,23 @@ def get_comment_for_answer(cursor, data_id):
 #add data
 
 @databases_common.connection_handler
-def add_question(cursor, title, message, time, image, vote=0, view=0):
-    cursor.execute(f"""
-            INSERT INTO question(title, message, submission_time, vote_number, view_number, image)
+def add_question(cursor, title, message, time, image):
+    cursor.execute("""
+            INSERT INTO question(user_name, title, message, submission_time, vote_number, view_number, image)
              VALUES
-            ('{title}', '{message}', '{time}', {vote}, {view}, '{image}')
+            (%(name)s, %(title)s, %(message)s, %(time)s, 0, 0, %(image)s)
             RETURNING id
-            """)
+            """,
+                   {'name': session['username'], 'title': title, 'message': message, 'time': time, 'image': image})
     return cursor.fetchone()
 
 
 @databases_common.connection_handler
-def add_answer(cursor, message, time, question_id, vote=0):
-    query = f"""
-                    INSERT INTO answer(submission_time, vote_number, message, question_id)
-                    VALUES 
-                    ('{time}', '{vote}', '{message}', {question_id})
-                    RETURNING id;
-                    """
-    cursor.execute(query)
-
-    return cursor.fetchone()
+def add_answer(cursor, message, time, question_id):
+    cursor.execute("""
+    INSERT INTO answer(user_name, submission_time, vote_number, message, question_id)
+    VALUES( %(name)s, %(time)s, 0, %(message)s, %(question_id)s )""",
+                   {'name': session['username'], 'time': time, 'message': message, 'question_id': question_id})
 
 
 @databases_common.connection_handler

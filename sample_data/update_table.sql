@@ -9,7 +9,7 @@ create table users_data
     password  varchar not null,
     honor     int,
     role      varchar not null,
-    submission_time timestamp without time zone
+    registration_date timestamp without time zone
 );
 
 create unique index users_data_email_uindex

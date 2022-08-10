@@ -10,6 +10,16 @@
 
 
     {%  block content %}
+        <div class="form_wrap">
+            <form class="form_wrap" action="/list" method="post">
+                <select name="order_by" id="">
+                    <option value="submission_time">Created</option>
+                    <option value="vote_number"></option>
+                    <option value="title"></option>
+                </select>
+            </form>
+        </div>
+
     {% if questions %}
         {% for question in questions %}
              <div class="question_container">
@@ -67,6 +77,9 @@
 
 
         {% else %}
-                <div>What a Luck Mate!!! You are the first to ask!!!</div>
+            <div class="form_wrap">
+                 <div class="forms">What a Luck Mate!!! You are the first to ask!!!</div>
+            </div>
+
         {% endif %}
     {% endblock %}

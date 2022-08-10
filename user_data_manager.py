@@ -14,7 +14,7 @@ import utils
 def register(cursor, username, email, password, time):
     password = utils.hash_password(password)
     query = """
-            INSERT INTO users_data (user_name, email, password, honor, role, submission_time)
+            INSERT INTO users_data (user_name, email, password, honor, role, registration_date)
             VALUES ( %(user_name)s, %(email)s, %(password)s, 0, 1, %(time)s)
             """
     args = {'user_name': username, 'email': email, 'password': password, 'time': time}
