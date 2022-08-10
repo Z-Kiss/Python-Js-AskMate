@@ -191,18 +191,18 @@ def edit_comment(comment_id, question_id):
 
 @app.route("/question/<question_id>/vote/<type_of_vote>")
 def vote_question(question_id, type_of_vote):
-    user_name = session['username']
-    data_manager.update_honor_question(user_name, type_of_vote)
+
+    user_data_manager.update_honor_question(user_name, type_of_vote)
+    session['honor'] =
     data_manager.change_vote_question(question_id, type_of_vote)
-    return redirect(url_for("show_question", question_id=question_id, user_name=user_name, view="no"))
+    return redirect(url_for("show_question", question_id=question_id,  view="no"))
 
 
 @app.route("/answer/<answer_id>/vote/<type_of_vote>/<question_id>")
 def vote_answer(answer_id, type_of_vote, question_id):
-    user_name = session['username']
-    data_manager.update_honor_answer(user_name, type_of_vote)
+    user_data_manager.update_honor_answer(user_name, type_of_vote)
     data_manager.change_vote_answer(answer_id, type_of_vote)
-    return redirect(url_for("show_question", question_id=question_id, user_name=user_name, view="no"))
+    return redirect(url_for("show_question", question_id=question_id,  view="no"))
 
 
 @app.route("/question/search", methods=['GET', 'POST'])

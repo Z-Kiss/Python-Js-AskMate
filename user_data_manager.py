@@ -29,3 +29,31 @@ def get_user_data_by_email(cursor, email):
     return cursor.fetchone()
 
 
+@databases_common.connection_handler
+def update_honor_question(cursor, user_name, vote, ):
+    if vote == "down":
+        query = """
+                UPDATE users_data 
+                SET honor = honor - 2 
+                WHERE users_data.user_name = %(user_name)s"""
+    elif vote == "up":
+        query = """
+                UPDATE users_data 
+                SET honor = honor + 5
+                WHERE users_data.user_name = %(user_name)s"""
+    cursor.execute(query, {"user_name": user_name})
+
+
+@databases_common.connection_handler
+def update_honor_answer(cursor, user_name, vote):
+    if vote == "down":
+        query = """
+                UPDATE users_data 
+                SET honor = honor - 2 
+                WHERE users_data.user_name = %(user_name)s"""
+    elif vote == "up":
+        query = """
+                UPDATE users_data
+                SET honor = honor + 10
+                WHERE users_data.user_name = %(user_name)s"""
+    cursor.execute(query, {"user_name": user_name})
