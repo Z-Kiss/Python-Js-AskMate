@@ -92,13 +92,15 @@ def get_honor_by_username(cursor):
     WHERE user_name = %(name)s""",
                    {'name': session['username']})
     return cursor.fetchone()
+
+
 @databases_common.connection_handler
 def list_all_users(cursor):
     query = """
             SELECT users_data.*, 
-                (SELECT COUNT(question.id) AS number_of_questions FROM question WHERE users_data."id " = question.user_id),
-                (SELECT COUNT(answer.id) as number_of_answers FROM answer WHERE users_data."id " = answer.user_id),
-                (SELECT COUNT(comment.id) as number_of_comments FROM comment WHERE users_data."id " = comment.user_id) FROM users_data;"""
+                (SELECT COUNT(question.id) AS number_of_questions FROM question WHERE users_data.user_name = question.user_name),
+                (SELECT COUNT(answer.id) as number_of_answers FROM answer WHERE users_data.user_name = answer.user_name),
+                (SELECT COUNT(comment.id) as number_of_comments FROM comment WHERE users_data.user_name = comment.user_name) FROM users_data;"""
     cursor.execute(query)
     return cursor.fetchall()
 
@@ -107,12 +109,39 @@ def list_all_users(cursor):
 def get_user_details(cursor, username):
     query = """
             SELECT users_data.*, 
-                (SELECT COUNT(question.id) AS number_of_questions FROM question WHERE users_data."id " = question.user_id),
-                (SELECT COUNT(answer.id) as number_of_answers FROM answer WHERE users_data."id " = answer.user_id),
-                (SELECT COUNT(comment.id) as number_of_comments FROM comment WHERE users_data."id " = comment.user_id) FROM users_data
+                (SELECT COUNT(question.id) AS number_of_questions FROM question WHERE users_data.user_name = question.user_name),
+                (SELECT COUNT(answer.id) as number_of_answers FROM answer WHERE users_data.user_name = answer.user_name),
+                (SELECT COUNT(comment.id) as number_of_comments FROM comment WHERE users_data.user_name = comment.user_name) FROM users_data
                 WHERE user_name = %(username)s;"""
     cursor.execute(query, {'username': username})
     return cursor.fetchall()
 
 
+@databases_common.connection_handler
+def get_user_questions(cursor, user_id):
+    query = """
+            SELECT id, title, message FROM question
+            LEFT JOIN users_data ud on question.user_name = ud.user_name
+            WHERE ud."id " = %(id)s"""
+    cursor.execute(query, {'id': user_id})
+    return cursor.fetchall()
 
+
+@databases_common.connection_handler
+def get_user_answers(cursor, answer_id):
+    query = """
+            SELECT * FROM answer
+            LEFT JOIN users_data ud on answer.user_name = ud.user_name
+            WHERE ud."id " = %(id)s"""
+    cursor.execute(query, {'id': answer_id})
+    return cursor.fetchall()
+
+
+@databases_common.connection_handler
+def get_user_comments(cursor, user_name):
+    query = """
+            SELECT * FROM comment
+            LEFT JOIN users_data ud on comment.user_name = ud.user_name
+            WHERE ud.user_name = %(user_name)s"""
+    cursor.execute(query, {'user_name': user_name})
+    return cursor.fetchall()

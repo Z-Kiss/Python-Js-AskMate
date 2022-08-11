@@ -3,4 +3,52 @@
 User Page
 {% endblock %}
 {% block content %}
+    <table class="header_table">
+        <tr>
+            <th colspan="7">User Details</th>
+        </tr>
+        {% for user in get_user %}
+        <tr>
+            <td>User ID:{{ user['id '] }}</td>
+            <td>Username: {{ user.user_name }}</td>
+            <td>Registration Date: {{ user.registration_date }}</td>
+            <td>Number of asked questions: {{ user.number_of_questions }}</td>
+            <td>Number of answers: {{ user.number_of_answers }}</td>
+            <td>Number of comments: {{ user.number_of_comments }}</td>
+            <td>Reputation: {{ user.honor }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <div class="question_table_wrapper">
+        <table class="question_table">
+        {% for question in user_questions %}
+            <tr>
+                <th>{{ session.username }}'s questions :</th>
+                <td><a href="/question/{{ question.id }}">{{ question['title'] }}</a></td>
+            </tr>
+        {% endfor %}
+        </table>
+    </div>
+
+    <table class="table_answer">
+    {% for answer in user_answers %}
+        <tr>
+            <th>{{ session.username }}'s answers : </th>
+        </tr>
+        <tr>
+            <td><a href="/question/{{ answer.id }}">{{ answer['message'] }}</a></td>
+        </tr>
+    {% endfor %}
+    </table>
+
+    <table class="table_comments">
+    {% for comment in user_comments %}
+        <tr>
+            <th>{{ session.username }}'s comments : </th>
+            <td><a href="/question/{{ comment.id }}">{{ comment['message'] }}</a></td>
+        </tr>
+    {% endfor %}
+    </table>
+
 {% endblock %}

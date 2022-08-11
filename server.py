@@ -277,10 +277,14 @@ def list_users():
 @app.route('/users/<user_name>')
 def show_user(user_name):
     get_user = user_data_manager.get_user_details(user_name)
+    user_questions = user_data_manager.get_user_questions(get_user[0]['id '])
+    user_answers = user_data_manager.get_user_answers(get_user[0]['id '])
+    user_comments = user_data_manager.get_user_comments(get_user[0]['user_name'])
+    print(user_comments)
+    print(user_answers)
     print(get_user)
-    return render_template('user_page.html', get_user=get_user)
-
-
+    print(user_questions)
+    return render_template('user_page.html', get_user=get_user, user_questions=user_questions, user_answers=user_answers, user_comments=user_comments)
 
 
 if __name__ == '__main__':

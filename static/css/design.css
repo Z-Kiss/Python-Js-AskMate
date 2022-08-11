@@ -369,10 +369,51 @@ body{
 .users_list_table{
     background-color: #44CBB1;
     border: outset;
+
 }
 
+
+.header_table {
+    background-color: #44CBB1;
+    border: outset;
+    width: max-content;
+
+}
+
+
+
+
+
 th, td {
-    border: 1.2px black;
     border-collapse: collapse;
-    border-style: dashed;
+    border-style: outset;
+}
+
+.question_table_wrapper{
+    display: flex;
+    flex-direction: column;
+}
+
+.question_table {
+    margin-top: 5px;
+    background-color: #44CBB1;
+    width: max-content;
+    display: flex;
+    flex-direction: row;
+
+}
+
+.table_answer {
+    margin-top: 5px;
+    background-color: #44CBB1;
+
+}
+
+.table_comments {
+    margin-top: 5px;
+    width: max-content;
+    display: flex;
+    flex-direction: column;
+    background-color: #44CBB1;
+    margin-bottom: 20px;
 }
