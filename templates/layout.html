@@ -7,25 +7,25 @@
 
     </head>
     <body>
-       <div class="header_container">
-             <div class="header">
-                 <div id="nav_buttons" >
-                     <div id="logo"><a  href="/" ><img  src="/static/image/logo1.jpg" alt="logo" width="120px" height="120px"></a></div>
-
+        <div class="header_container">
+            <div class="header">
+                <div id="nav_buttons" >
+                    <div id="logo"><img  src="/static/image/logo1.jpg" alt="logo" width="120px" height="120px"></div>
                              <div class="header_nav">
-                                 <div id="nav_but_1"><a href="/list">Show all questions</a> </div>
-                                 <div id="nav_but_2"><a href="/question/search">Search</a> </div>
-                                 <div id="nav_but_3"><a href="/add-question">Ask Something from Máté</a> </div>
+                                 <div><a href="/list">Show all questions</a> </div>
+                                 <div><a href="/tags">Show tags</a> </div>
+                                 <div><a href="/question/search">Search</a> </div>
+                                 <div><a href="/add-question">Ask Something from Máté</a> </div>
                             </div>
                             <div class="user_buttons">
-                                <div>Hy {% block user %}{% endblock %}</div>
-                                <div><a href="/users">Check profiles</a></div>
+                                <div>Hy {{ session.username }} Honor: {{ session.honor }} </div>
+                                <div><button>check profile</button></div>
                                 <div><button>check quetions</button></div>
-                                <div><button>Logout</button></div>
+                                <div><a href="/logout"><button>Logout</button></a></div>
                             </div>
-                     <div id="logo"><a  href="/" ><img  src="/static/image/logo1.jpg" alt="logo" width="120px" height="120px"></a></div>
-                 </div>
-             </div>
+                    <div id="logo"><img  src="/static/image/logo1.jpg" alt="logo" width="120px" height="120px"></div>
+                </div>
+            </div>
         </div>
         {% block content %}
         {% endblock %}

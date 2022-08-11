@@ -8,10 +8,23 @@
         {{ title }}
     {% endblock %}
 
-    {% block user %}
-        {{ user }}
-    {% endblock %}
+
     {%  block content %}
+        <div class="form_wrap">
+            <form class="form_wrap" action="/list" method="POST">
+                <select name="order_by">
+                    <option value="submission_time">Time</option>
+                    <option value="vote_number">Vote</option>
+                    <option value="title">Title</option>
+                </select>
+                 <select name="order_direction">
+                    <option value="asc">Ascending</option>
+                    <option value="desc">Descending</option>
+                </select>
+                <button type="submit"> Order</button>
+            </form>
+        </div>
+
     {% if questions %}
         {% for question in questions %}
              <div class="question_container">
@@ -55,7 +68,7 @@
                         </div>
                         <div class="btn">
                             <div><a href="/question/{{ question.id }}/new-comment"><button>Add new Comment</button></a></div>
-                            <div><a href='/add_answer/{{ question.id }}'></a><button>Add new answer</button></div>
+                            <div><a href='/add_answer/{{ question.id }}'><button>Add new answer</button></a></div>
                             <div><a href='/question/{{ question.id }}/edit'><button>Edit question</button></a></div>
                             <div><a href='/delete/question/{{ question.id }}'><button>Delete question</button></a></div>
                         </div>
@@ -69,6 +82,9 @@
 
 
         {% else %}
-                <div>What a Luck Mate!!! You are the first to ask!!!</div>
+            <div class="form_wrap">
+                 <div class="forms">What a Luck Mate!!! You are the first to ask!!!</div>
+            </div>
+
         {% endif %}
     {% endblock %}

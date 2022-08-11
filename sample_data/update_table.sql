@@ -1,4 +1,5 @@
-DROP TABLE IF EXISTS users_data
+
+DROP TABLE IF EXISTS users_data;
 create table users_data
 (
     "id "     serial

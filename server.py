@@ -21,8 +21,9 @@ def register():
         username = request.form.get('username')
         email = request.form.get('email')
         psw = request.form.get('password')
+        time = datetime.datetime.now()
         try:
-            user_data_manager.register(username, email, psw)
+            user_data_manager.register(username, email, psw, time)
         except psycopg2.errors.UniqueViolation:
             flash('Username or Email already in use!')
         return redirect("/login")
@@ -38,12 +39,13 @@ def login():
             if utils.verify_password(psw, user_data['password']):
                 session['username'] = user_data['user_name']
                 session['role'] = user_data['role']
+                session['honor'] = user_data['honor']
                 return redirect('/')
             else:
-                flash('Bad password')
+                flash('Incorrect Password/email')
                 return redirect('/login')
         else:
-            flash('Bad Email')
+            flash('Incorrect Password/Email')
             return redirect('/login')
     elif request.method == 'GET':
         return render_template('login.html')
@@ -57,25 +59,27 @@ def logout():
         flash(f"You have been logged out {username}")
         return redirect("/")
 
+
 @app.route("/")
 def short_five_latest():
     if 'username' not in session:
         return redirect('/login')
     questions = data_manager.show_five_latest()
     tags = [data_manager.get_tags_for_question(question['id']) for question in questions]
-    return render_template("show_all_question.html", questions=questions, tags=tags, user=session['username'])
+    return render_template("show_all_question.html", questions=questions, tags=tags, user='Hi ' + session['username'])
 
-@app.route("/list")
+
+@app.route("/list", methods=['GET','POST'])
 def show_all_questions():
-    title = 'All questions'
-    order_by = request.args.get('order_by')
-    order_direction = request.args.get('order_direction')
-    if order_by and order_direction:
-        questions = data_manager.show_all_question(order_by, order_direction)
-    else:
+    if request.method == 'GET':
         questions = data_manager.show_all_question()
+    elif request.method == 'POST':
+        order_by = request.form.get('order_by')
+        order_direction = request.form.get('order_direction')
+        questions = data_manager.show_all_question(order_by, order_direction)
     tags = [data_manager.get_tags_for_question(question['id']) for question in questions]
-    return flask.render_template("show_all_question.html", questions=questions, tags=tags, title=title)
+    return flask.render_template("show_all_question.html", questions=questions, tags=tags)
+
 
 @app.route("/question/<question_id>")
 def show_question(question_id):
@@ -86,7 +90,7 @@ def show_question(question_id):
     tags = data_manager.get_tags_for_question(question_id)
     return flask.render_template("show_question.html", question=question, tags=tags,
                                  comment_of_question=comment_of_question, answers=answers,
-                                 comment_of_answer=comment_of_answer )
+                                 comment_of_answer=comment_of_answer)
 
 
 @app.route("/delete/question/<question_id>")
@@ -116,7 +120,7 @@ def add_tag(question_id):
     if request.method == 'GET':
         return render_template('add_tag.html', question_id=question_id)
     elif request.method == 'POST':
-        tags = request.form.get('tag').split()
+        tags = set(request.form.get('tag').split())
         data_manager.update_tags(tags)
         data_manager.add_tags(tags, question_id)
         return redirect(url_for('show_question', question_id=question_id))
@@ -126,15 +130,14 @@ def add_tag(question_id):
 def add_answer(question_id):
     if request.method == 'POST':
         time = datetime.datetime.now()
-        vote = 0
         message = request.form.get('message')
-        data_manager.add_answer(message, time, question_id, vote)
+        data_manager.add_answer(message, time, question_id)
         return redirect(url_for('show_question', question_id=question_id))
     elif request.method == 'GET':
         return render_template('answer.html', requested_answer=None, question_id=question_id)
 
 
-@app.route('/question/<question_id>/new-comment', methods=['POST','GET'])
+@app.route('/question/<question_id>/new-comment', methods=['POST', 'GET'])
 def new_comment(question_id):
     if request.method == 'POST':
         message = request.form.get('message')
@@ -150,8 +153,7 @@ def new_comment_answer(answer_id, question_id):
     if request.method == 'POST':
         message = request.form.get('message')
         submission_time = datetime.datetime.now()
-        edited_count = 0
-        data_manager.comment_answer(answer_id, message, submission_time, edited_count)
+        data_manager.comment_answer(answer_id, message, submission_time)
         return redirect(url_for('show_question', question_id=question_id))
     return render_template('add_comment.html', answer_id=answer_id, question_id=question_id)
 
@@ -190,14 +192,22 @@ def edit_comment(comment_id, question_id):
 
 @app.route("/question/<question_id>/vote/<type_of_vote>")
 def vote_question(question_id, type_of_vote):
+    user_name = user_data_manager.select_name_by_question(question_id)
+    user_data_manager.update_honor_question(user_name['user_name'], type_of_vote)
+    honor = user_data_manager.get_honor_by_username()
+    session['honor'] = honor['honor']
     data_manager.change_vote_question(question_id, type_of_vote)
-    return redirect(url_for("show_question", question_id=question_id, view="no"))
+    return redirect(url_for("show_question", question_id=question_id))
 
 
 @app.route("/answer/<answer_id>/vote/<type_of_vote>/<question_id>")
 def vote_answer(answer_id, type_of_vote, question_id):
+    user_name = user_data_manager.select_name_by_answer(answer_id)
+    user_data_manager.update_honor_answer(user_name['user_name'], type_of_vote)
+    honor = user_data_manager.get_honor_by_username()
+    session['honor'] = honor['honor']
     data_manager.change_vote_answer(answer_id, type_of_vote)
-    return redirect(url_for("show_question", question_id=question_id, view="no"))
+    return redirect(url_for("show_question", question_id=question_id))
 
 
 @app.route("/question/search", methods=['GET', 'POST'])
@@ -212,7 +222,6 @@ def search_question():
             question['message'] = question['message'].replace(search, "<strong> " + search + " </strong>")
         tags = [data_manager.get_tags_for_question(question['id']) for question in questions]
         return flask.render_template("search_result.html", questions=questions, tags=tags)
-
 
 
 @app.route('/delete/question/comment/<comment_id>/<question_id>')
@@ -232,10 +241,29 @@ def delete_answer(question_id, answer_id):
     data_manager.delete_answer(answer_id)
     return redirect(url_for('show_question', question_id=question_id, view='no'))
 
+
 @app.route('/delete/<question_id>/<tag_id>/delete_tag')
 def delete_tag(question_id, tag_id):
     data_manager.delete_tag(question_id, tag_id)
     return redirect(url_for("show_question", question_id=question_id, view="no"))
+
+
+@app.route('/accept/<answer_id>/<user_name>/<question_id>')
+def accept_answer(answer_id, user_name, question_id):
+    data_manager.accept_answer(answer_id)
+    user_data_manager.update_honor_answer(user_name, 'accept')
+    return redirect(url_for("show_question", question_id=question_id))
+
+@app.route('/reject/<answer_id>/<user_name>/<question_id>')
+def reject_answer(answer_id, user_name, question_id):
+    data_manager.reject_answer(answer_id)
+    user_data_manager.update_honor_answer(user_name, 'reject')
+    return redirect(url_for("show_question", question_id=question_id))
+
+@app.route('/tags')
+def show_tags():
+    tags = data_manager.get_all_tags()
+    return render_template('tags.html', tags=tags)
 
 
 @app.route('/users')

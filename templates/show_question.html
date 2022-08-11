@@ -33,7 +33,7 @@
             </div>
             <div class="question_footer">
                 <div class="btn">
-                    <div ><a href="/question/{{ question.id }}/vote/up"><button>&uarr;</button></a></div>
+                    <div><a href="/question/{{ question.id }}/vote/up"><button>&uarr;</button></a></div>
                     <div><a href="/question/{{ question.id }}/vote/down"><button>&darr;</button></a></div>
                 </div>
                 <div class="tag">
@@ -46,7 +46,7 @@
                 </div>
                 <div class="btn">
                     <div><a href="/question/{{ question.id }}/new-comment"><button>Add new Comment</button></a></div>
-                    <div><a href="/add_answer/{{ question.id }}"></a><button>Add new answer</button></div>
+                    <div><a href="/add_answer/{{ question.id }}"><button>Add new answer</button></a></div>
                     <div><a href="/add_tag/{{ question.id }}"><button>Add tag</button></a></div>
                 </div>
             </div>
@@ -84,8 +84,18 @@
     {% if answers %}
 
         {% for answer in answers %}
+            {% if question.user_name == session.username and answer.user_name != question.user_name %}
+                {% if answer.accepted == false %}
+                <div class="answer_button"><a href="/accept/{{ answer.id }}/{{ answer.user_name }}/{{ question.id }}"><button>Accept answer</button></a></div>
+                    {% else %}
+                <div class="answer_button"><a href="/reject/{{ answer.id }}/{{ answer.user_name }}/{{ question.id }}"><button>Reject answer</button></a></div>
+                {% endif %}
+            {% endif %}
+        {% if answer.accepted == false %}
         <div class="answer_wrapper">
-
+        {% else %}
+        <div class="answer_wrapper_accepted">
+        {% endif %}
             <div class="answer_content">
 
                <div class="answer_body">

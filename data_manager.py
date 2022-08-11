@@ -5,30 +5,25 @@ from psycopg2 import sql
 from werkzeug.utils import secure_filename
 
 import databases_common
-from flask import request
+from flask import request, session
 
 ALLOWED_EXTENSIONS = {"jpg", "png"}
-
 
 UPLOAD_FOLDER = 'static/image/'
 
 
-
-
 @databases_common.connection_handler
 def show_all_question(cursor, order_by='submission_time', order_direction='desc'):
-    if order_direction in ['asc', 'desc']:
-        query = sql.SQL("SELECT * FROM question ORDER BY {} {};").format(sql.Identifier(order_by), sql.SQL(order_direction))
-    else:
-        raise Exception()
+    query = sql.SQL("SELECT * FROM question ORDER BY {} {};").format(sql.Identifier(order_by), sql.SQL(order_direction))
     cursor.execute(query)
     return cursor.fetchall()
+
 
 @databases_common.connection_handler
 def show_five_latest(cursor):
     cursor.execute("""
-    SELECT * FROM question
-    ORDER BY submission_time DESC LIMIT 5""")
+        SELECT * FROM question
+        ORDER BY submission_time DESC LIMIT 5""")
     return cursor.fetchall()
 
 
@@ -39,13 +34,14 @@ def get_question(cursor, data_id):
                    {"id": data_id})
     return cursor.fetchone()
 
+
 @databases_common.connection_handler
 def get_answer(cursor, answer_id):
     cursor.execute("""
     SELECT *
     FROM answer
     WHERE id = %(answer_id)s""",
-                   {"answer_id":answer_id})
+                   {"answer_id": answer_id})
     return cursor.fetchone()
 
 
@@ -58,7 +54,8 @@ def get_comment(cursor, comment_id):
                    {"comment_id": comment_id})
     return cursor.fetchone()
 
-#get data corresponding something
+
+# get data corresponding something
 @databases_common.connection_handler
 def get_answers_for_question(cursor, data_id):
     cursor.execute("""SELECT * FROM answer
@@ -85,54 +82,53 @@ def get_comment_for_answer(cursor, data_id):
                    {"id": data_id})
     return cursor.fetchall()
 
-#add data
+
+# add data
 
 @databases_common.connection_handler
-def add_question(cursor, title, message, time, image, vote=0, view=0):
-    cursor.execute(f"""
-            INSERT INTO question(title, message, submission_time, vote_number, view_number, image)
+def add_question(cursor, title, message, time, image):
+    cursor.execute("""
+            INSERT INTO question(user_name, title, message, submission_time, vote_number, view_number, image)
              VALUES
-            ('{title}', '{message}', '{time}', {vote}, {view}, '{image}')
+            (%(name)s, %(title)s, %(message)s, %(time)s, 0, 0, %(image)s)
             RETURNING id
-            """)
+            """,
+                   {'name': session['username'], 'title': title, 'message': message, 'time': time, 'image': image})
     return cursor.fetchone()
 
 
 @databases_common.connection_handler
-def add_answer(cursor, message, time, question_id, vote=0):
-    query = f"""
-                    INSERT INTO answer(submission_time, vote_number, message, question_id)
-                    VALUES 
-                    ('{time}', '{vote}', '{message}', {question_id})
-                    RETURNING id;
-                    """
-    cursor.execute(query)
-
-    return cursor.fetchone()
+def add_answer(cursor, message, time, question_id):
+    cursor.execute("""
+    INSERT INTO answer(user_name, submission_time, vote_number, question_id, message)
+    VALUES( %(name)s, %(time)s, 0, %(question_id)s, %(message)s )""",
+                   {'name': session['username'], 'time': time, 'message': message, 'question_id': question_id})
 
 
 @databases_common.connection_handler
 def add_comment(cursor, question_id, message, submission_time, edited_count=0):
     query = """
-                INSERT INTO comment (question_id, message, submission_time, edited_count)
-                VALUES (%(question_id)s, %(message)s, %(submission_time)s, %(edited_count)s)
+                INSERT INTO comment (user_name, question_id, message, submission_time, edited_count)
+                VALUES (%(name)s, %(question_id)s, %(message)s, %(submission_time)s, %(edited_count)s)
                 """
-    args = {'question_id': question_id, 'message': message,
+    args = {'name': session['username'], 'question_id': question_id, 'message': message,
             'submission_time': submission_time, 'edited_count': edited_count
             }
     cursor.execute(query, args)
 
-#add data corresponding something
+
+# add data corresponding something
 @databases_common.connection_handler
-def comment_answer(cursor, answer_id, message, submission_time, edited_count):
+def comment_answer(cursor, answer_id, message, submission_time):
     query = """
-            INSERT INTO comment (answer_id, message,submission_time,edited_count)
-            VALUES (%(answer_id)s,%(message)s,%(submission_time)s,%(edited_count)s)
+            INSERT INTO comment (user_name, answer_id, message,submission_time,edited_count)
+            VALUES (%(name)s, %(answer_id)s,%(message)s,%(submission_time)s, 0)
             RETURNING id;
             """
 
-    args = {'answer_id': answer_id, 'message': message, 'submission_time': submission_time, 'edited_count': edited_count}
+    args = {'name': session['username'], 'answer_id': answer_id, 'message': message, 'submission_time': submission_time}
     cursor.execute(query, args)
+
 
 # update data
 @databases_common.connection_handler
@@ -170,7 +166,6 @@ def update_answer(cursor, id, message, image, submission_time):
 
 @databases_common.connection_handler
 def update_tags(cursor, tags):
-
     for tag in tags:
         try:
             cursor.execute("""
@@ -180,7 +175,8 @@ def update_tags(cursor, tags):
         except psycopg2.errors.UniqueViolation:
             continue
 
-#delete something
+
+# delete something
 @databases_common.connection_handler
 def delete_question(cursor, question_id):
     cursor.execute("""
@@ -205,6 +201,7 @@ def delete_comment_by_answer(cursor, comment_id):
     cursor.execute("""DELETE FROM comment
                     WHERE comment.id = %(comment_id)s""", {'comment_id': comment_id})
 
+
 @databases_common.connection_handler
 def delete_tag(cursor, question_id, tag_id):
     cursor.execute("""
@@ -213,8 +210,7 @@ def delete_tag(cursor, question_id, tag_id):
                    {"question_id": question_id, "tag_id": tag_id})
 
 
-
-#utility
+# utility
 
 @databases_common.connection_handler
 def change_vote_question(cursor, question_id, vote):
@@ -223,6 +219,7 @@ def change_vote_question(cursor, question_id, vote):
     elif vote == "up":
         query = "UPDATE question SET vote_number = vote_number + 1 WHERE question.id = %(question_id)s"
     cursor.execute(query, {"question_id": question_id})
+
 
 @databases_common.connection_handler
 def change_vote_answer(cursor, answer_id, vote):
@@ -248,7 +245,7 @@ def get_answers_and_comments(question):
     return answers, comment_of_question, comment_of_answer
 
 
-#search feature
+# search feature
 @databases_common.connection_handler
 def get_searched_question(cursor, search):
     cursor.execute("""
@@ -260,7 +257,7 @@ def get_searched_question(cursor, search):
     return cursor.fetchall()
 
 
-#upload image
+# upload image
 def allowed_file(filename):
     return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
 
@@ -273,6 +270,7 @@ def upload_image():
         filename = secure_filename(file.filename)
         file.save(os.path.join(UPLOAD_FOLDER, filename))
         return filename
+
 
 # tags
 
@@ -301,3 +299,27 @@ def add_tags(cursor, tags, question_id):
         INSERT INTO question_tag (question_id, tag_id)
         VALUES (%(question_id)s, %(id_of_tag)s)""",
                        {'question_id': question_id, 'id_of_tag': id_of_tag['id']})
+
+@databases_common.connection_handler
+def get_all_tags(cursor):
+    cursor.execute("""
+    SELECT tag.name, COUNT(question_id) as q_count FROM tag
+    join question_tag qt on tag.id = qt.tag_id
+    GROUP BY  tag.name""")
+    return cursor.fetchall()
+
+@databases_common.connection_handler
+def accept_answer(cursor, answer_id):
+    cursor.execute("""
+            UPDATE answer
+            SET accepted = true
+            WHERE answer.id = %(answer_id)s""",
+                   {"answer_id": answer_id})
+
+@databases_common.connection_handler
+def reject_answer(cursor, answer_id):
+    cursor.execute("""
+            UPDATE answer
+            SET accepted = false
+            WHERE answer.id = %(answer_id)s""",
+                   {"answer_id": answer_id})
