@@ -6,12 +6,17 @@ from flask import Flask, request, redirect, flash, url_for, render_template,sess
 import data_manager
 import user_data_manager
 import utils
+from bonus_questions import SAMPLE_QUESTIONS
 
 app = Flask(__name__)
 
 
 app.config['SECRET_KEY'] = "francosize"
 
+
+@app.route("/bonus-questions")
+def main():
+    return render_template('bonus_questions.html', questions=SAMPLE_QUESTIONS)
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
