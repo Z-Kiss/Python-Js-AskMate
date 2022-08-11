@@ -3,7 +3,7 @@
 {% block content %}
     <div class="form_wrap">
 
-        <form  class="forms" action="/answer/{{ answer.id }}/edit/{{ question_id }}" method="POST">
+        <form  class="forms" action="/answer/{{ answer.id }}/edit/{{ question_id }}" method="POST" enctype="multipart/form-data">
         <h1>Edit answer</h1>
             <label for="message">Message:</label><br>
                 <textarea id="message" name="message" rows="8" cols="50" required>{{ answer.message }}</textarea><br>

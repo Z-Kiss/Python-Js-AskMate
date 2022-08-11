@@ -28,12 +28,13 @@
         </div>
         {% else %}
         <div class="form_wrap">
-            <form class="forms" action="/question/{{ question.id }}/edit" method="POST">
+            <form class="forms" action="/question/{{ question.id }}/edit" method="POST" enctype="multipart/form-data">
                 <h1>Edit question</h1>
                 <label for="title">Title:</label><br>
                 <textarea id="title" name="title" rows="3" cols="50" required>{{ question.title }}</textarea><br><br>
                 <label for="message">Message:</label><br>
                 <textarea id="message" name="message" rows="8" cols="50" required>{{ question.message }}</textarea><br>
+                <input type="file" id="picture" name="picture" accept="image/*" ><br><br>
                 <button type="submit">Update Question</button>
             </form>
         </div>

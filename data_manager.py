@@ -238,11 +238,19 @@ def increase_view(cursor, data_id):
                    {"id": data_id})
 
 @databases_common.connection_handler
-def get_image(cursor, answer_id):
+def get_image_to_answer(cursor, answer_id):
     cursor.execute("""
     SELECT answer.image as image FROM answer
     WHERE answer.id = %(answer_id)s""",
                    {'answer_id': answer_id})
+    return cursor.fetchone()
+
+@databases_common.connection_handler
+def get_image_to_question(cursor, question_id):
+    cursor.execute("""
+    SELECT question.image as image FROM question
+    WHERE question.id = %(question_id)s""",
+                   {'question_id': question_id})
     return cursor.fetchone()
 
 def get_answers_and_comments(question):

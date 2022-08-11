@@ -167,7 +167,13 @@ def new_comment_answer(answer_id, question_id):
 @app.route('/question/<question_id>/edit', methods=["GET", "POST"])
 def edit_question(question_id):
     if request.method == 'POST':
-        data_manager.update_question(request.form.get('title'), request.form.get('message'), request.form.get('image'), question_id)
+        image = request.files['picture']
+        if image:
+            image = data_manager.upload_image()
+        else:
+            image = data_manager.get_image_to_question(question_id)
+            image = image['image']
+        data_manager.update_question(request.form.get('title'), request.form.get('message'), image, question_id)
         return redirect(url_for('show_question', question_id=question_id))
     question = data_manager.get_question(question_id)
     return render_template('ask_edit_question.html', question=question)
@@ -177,11 +183,11 @@ def edit_question(question_id):
 def edit_answer(answer_id, question_id):
     if request.method == 'POST':
         message = request.form.get('message')
-        image = request.form.get('picture')
+        image = request.files['picture']
         if image:
             image = data_manager.upload_image()
         else:
-            image = data_manager.get_image(answer_id)
+            image = data_manager.get_image_to_answer(answer_id)
             image = image['image']
         time = datetime.datetime.now()
         data_manager.update_answer(answer_id, message, image, time)
