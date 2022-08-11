@@ -317,3 +317,24 @@ body{
     padding: 10px;
 
 }
+
+.users_list_wrapper{
+    width: 80%;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+
+}
+
+.users_list_table{
+    background-color: #44CBB1;
+    border: outset;
+}
+
+th, td {
+    border: 1.2px black;
+    border-collapse: collapse;
+    border-style: dashed;
+}

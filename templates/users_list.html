@@ -1,7 +1,28 @@
 {% extends 'layout.html' %}
 {% block page_title %}
-Register
+Users list
 {% endblock %}
 {% block content %}
-
+<div class="users_list_wrapper">
+    <table class="users_list_table">
+        <tr>
+            <th>Username</th>
+            <th>Registration date</th>
+            <th>Number of asked questions</th>
+            <th>Number of answers</th>
+            <th>Number of comments</th>
+            <th>Reputation</th>
+        </tr>
+        {% for user in users %}
+            <tr>
+                <td><a href="{{ url_for('show_user', user_name=user.user_name) }}">{{ user.user_name }}</a></td>
+                <td>{{ user.registration_date }}</td>
+                <td>{{ user.number_of_questions }}</td>
+                <td>{{ user.number_of_answers }}</td>
+                <td>{{ user.number_of_comments }}</td>
+                <td>{{ user.honor }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+</div>
 {% endblock %}
