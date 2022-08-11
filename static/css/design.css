@@ -12,12 +12,7 @@ a:visited {
 a{
     color: black;
 }
-body{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-   background-image: url("/static/image/background1.webp");
-}
+
 .footer{
     display: flex;
     justify-content: space-between;
@@ -65,21 +60,6 @@ body{
     flex-direction: row;
     padding: 30px;
     height: max-content;
-}
-#nav_but_1{
-
-
-    }
-
-#nav_but_2{
-
-
-}
-
-#nav_but_3{
-
-
-
 }
 
 #nav_title{
@@ -375,4 +355,11 @@ body{
     margin-right: auto;
     margin-left: auto;
     text-align: center;
+}
+body{
+   background-image: url("/static/image/background1.webp");
+}
+
+.dark-mode{
+    background: black;
 }

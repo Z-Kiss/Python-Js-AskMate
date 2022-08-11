@@ -258,7 +258,7 @@ def get_searched_question(cursor, search):
     cursor.execute("""
     SELECT DISTINCT question.* FROM question 
     LEFT JOIN answer on question.id = answer.question_id
-    WHERE question.message LIKE %(search)s OR question.title LIKE %(search)s OR answer.message LIKE %(search)s ;
+    WHERE question.message ILIKE %(search)s OR question.title ILIKE %(search)s OR answer.message ILIKE %(search)s ;
     """,
                    {"search": "%" + str(search) + "%"})
     return cursor.fetchall()
