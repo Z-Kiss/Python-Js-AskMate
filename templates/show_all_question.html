@@ -35,6 +35,7 @@
 
                             <div class="vote_view">
                                 <div>Title: {{ question.title }}</div>
+                                <div>Created by: {{ question.user_name }}</div>
                                 <div>Asked at: {{ question.submission_time.strftime('%m-%d %H:%M') }}</div>
                                 <div style="display: flex; gap:20px">
                                     <div >Vote: {{ question.vote_number }}</div>

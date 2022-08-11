@@ -60,7 +60,7 @@ def get_comment(cursor, comment_id):
 def get_answers_for_question(cursor, data_id):
     cursor.execute("""SELECT * FROM answer
                     WHERE answer.question_id = %(id)s
-                    ORDER BY answer.submission_time DESC""",
+                    ORDER BY answer.accepted DESC, answer.submission_time DESC""",
                    {"id": data_id})
     return cursor.fetchall()
 
@@ -98,11 +98,11 @@ def add_question(cursor, title, message, time, image):
 
 
 @databases_common.connection_handler
-def add_answer(cursor, message, time, question_id):
+def add_answer(cursor, message, time, image, question_id):
     cursor.execute("""
-    INSERT INTO answer(user_name, submission_time, vote_number, question_id, message)
-    VALUES( %(name)s, %(time)s, 0, %(question_id)s, %(message)s )""",
-                   {'name': session['username'], 'time': time, 'message': message, 'question_id': question_id})
+    INSERT INTO answer(user_name, submission_time, vote_number, question_id, message, image)
+    VALUES( %(name)s, %(time)s, 0, %(question_id)s, %(message)s, %(image)s )""",
+        {'name': session['username'], 'time': time, 'question_id': question_id, 'message': message, 'image': image})
 
 
 @databases_common.connection_handler
@@ -237,6 +237,13 @@ def increase_view(cursor, data_id):
                     WHERE id = %(id)s""",
                    {"id": data_id})
 
+@databases_common.connection_handler
+def get_image(cursor, answer_id):
+    cursor.execute("""
+    SELECT answer.image as image FROM answer
+    WHERE answer.id = %(answer_id)s""",
+                   {'answer_id': answer_id})
+    return cursor.fetchone()
 
 def get_answers_and_comments(question):
     answers = get_answers_for_question(question['id'])

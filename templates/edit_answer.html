@@ -1,11 +1,15 @@
 {% extends 'layout.html' %}
 
 {% block content %}
+    <div class="form_wrap">
 
-<h1>Edit comment</h1>
-        <form action="/comment/{{ comment.id }}/edit-comment/{{ question_id }}" method="POST">
+        <form  class="forms" action="/answer/{{ answer.id }}/edit/{{ question_id }}" method="POST">
+        <h1>Edit answer</h1>
             <label for="message">Message:</label><br>
-                <textarea id="message" name="message" rows="8" cols="50" required>{{ comment.message }}</textarea><br>
-    <button type="submit">Edit comment</button>
+                <textarea id="message" name="message" rows="8" cols="50" required>{{ answer.message }}</textarea><br>
+                <input type="file" id="picture" name="picture" accept="image/*" value={{ answer.image }} ><br>
+        <button type="submit">Edit answer</button>
+        </form>
+    </div>
 
 {% endblock %}

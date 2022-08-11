@@ -165,7 +165,7 @@ body{
 
 .comment_header{
     display: flex;
-
+    border-bottom-style: inset;
     justify-content: space-between;
 }
 
@@ -210,6 +210,7 @@ body{
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    overflow: auto;
 
 }
 
@@ -218,6 +219,8 @@ body{
     flex-direction: column;
     border-bottom-style: groove;
     padding: 5px;
+
+
 
 }
 .answer_title{
@@ -245,7 +248,10 @@ body{
 }
 
 .answer_img {
-    max-height: 150px;
+    display: flex;
+
+    flex-shrink: 1;
+    max-height: 160px;
 }
 
 .answer_img_wrapper {
@@ -354,4 +360,19 @@ body{
     display: flex;
     justify-self: flex-end;
     align-self: flex-end;
+}
+.tag_container{
+    display: flex;
+    justify-content: center;
+}
+.tag_table{
+    background-color: #44CBB1;
+    padding: 20px;
+    border-style: outset;
+    gap: 30px
+}
+.table_content{
+    margin-right: auto;
+    margin-left: auto;
+    text-align: center;
 }
