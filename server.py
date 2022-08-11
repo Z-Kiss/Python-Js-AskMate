@@ -6,12 +6,17 @@ from flask import Flask, request, redirect, flash, url_for, render_template,sess
 import data_manager
 import user_data_manager
 import utils
+from bonus_questions import SAMPLE_QUESTIONS
 
 app = Flask(__name__)
 
 
 app.config['SECRET_KEY'] = "francosize"
 
+
+@app.route("/bonus-questions")
+def main():
+    return render_template('bonus_questions.html', questions=SAMPLE_QUESTIONS)
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
@@ -131,7 +136,8 @@ def add_answer(question_id):
     if request.method == 'POST':
         time = datetime.datetime.now()
         message = request.form.get('message')
-        data_manager.add_answer(message, time, question_id)
+        image = data_manager.upload_image()
+        data_manager.add_answer(message, time, image, question_id)
         return redirect(url_for('show_question', question_id=question_id))
     elif request.method == 'GET':
         return render_template('answer.html', requested_answer=None, question_id=question_id)
@@ -171,12 +177,17 @@ def edit_question(question_id):
 def edit_answer(answer_id, question_id):
     if request.method == 'POST':
         message = request.form.get('message')
-        image = request.form.get('image')
+        image = request.form.get('picture')
+        if image:
+            image = data_manager.upload_image()
+        else:
+            image = data_manager.get_image(answer_id)
+            image = image['image']
         time = datetime.datetime.now()
         data_manager.update_answer(answer_id, message, image, time)
         return redirect(url_for('show_question', question_id=question_id))
     answer = data_manager.get_answer(answer_id)
-    return render_template('edit_comment.html', answer=answer, question_id=question_id)
+    return render_template('edit_answer.html', answer=answer, question_id=question_id)
 
 
 @app.route("/comment/<comment_id>/edit-comment/<question_id>", methods=['POST', 'GET'])
@@ -187,7 +198,7 @@ def edit_comment(comment_id, question_id):
         data_manager.update_comment(comment_id, message, time)
         return redirect(url_for("show_question", question_id=question_id))
     comment = data_manager.get_comment(comment_id)
-    return render_template('edit_answer.html', comment=comment, question_id=question_id)
+    return render_template('edit_comment.html', comment=comment, question_id=question_id)
 
 
 @app.route("/question/<question_id>/vote/<type_of_vote>")

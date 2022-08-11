@@ -15,6 +15,8 @@
             <div class="question_header">
                     <div class="vote_view">
                         <div>Title: {{ question.title }}</div>
+                        <div>Created by: {{ question.user_name }}</div>
+                        <div>Posted at: {{ question.submission_time.strftime('%m-%d %H:%M') }}</div>
                         <div style="display: flex; gap:20px">
                             <div >Vote: {{ question.vote_number }}</div>
                             <div >View: {{ question.view_number }}</div>
@@ -52,6 +54,7 @@
             </div>
         </div>
     </div>
+
     <h2 style="text-align: center"> Comment of Questions</h2>
     <div class="comment_container">
     {%  if comment_of_question %}
@@ -60,7 +63,7 @@
 
         <div class="comment">
             <div class="comment_header">
-                <div>Created at: {{ comment.submission_time.strftime('%m-%d %H:%M') }}</div>
+                <div>Posted by: {{ comment.user_name }}</div>
                 <div><a href="/delete/question/comment/{{ comment.id }}/{{ question.id }}"><button>X</button></a></div>
             </div>
             <div class="comment_body">
@@ -80,6 +83,7 @@
 
     <hr>
     <h2 style="text-align: center">Answers and Comments</h2>
+
     <div class="answer_container">
     {% if answers %}
 
@@ -102,6 +106,7 @@
                    <div class="answer_title">
                         Vote number:{{ answer.vote_number }}
                        <div><a href="/answer/{{ answer.id }}/new-comment/{{ question.id }}"><button>Write A Comment!</button></a></div>
+                       <div><a href="/answer/{{ answer.id }}/edit/{{ question.id }}"><button>Edit</button></a></div>
                        <div id="btn">
                            <a href="/answer/{{ answer.id }}/vote/up/{{ question.id }}"><button>&uarr;</button></a>
                            <a href="/answer/{{ answer.id }}/vote/down/{{ question.id }}"><button>&darr;</button></a>
@@ -111,11 +116,10 @@
                        {{ answer.message }}
                    </div>
                </div>
-               {% if answer.image %}
                <div class="answer_img_wrapper">
-                   <img class="answer_img" src="/static/image/{{ answer.image }}" alt="">
+                   <div><img class="answer_img" src="/static/image/{{ answer.image }}" alt=""></div>
                </div>
-               {% endif %}
+
             </div>
 
             <div class="answer_comment_wrapper">
@@ -124,9 +128,12 @@
                         {% for comment in comment_of_answer[loop.index0] %}
                              <div class="answer_comment_body">
                                 <div class="answer_comment_header">
+                                    <div>Created by: {{ comment.user_name }}</div>
                                     <div>Posted at:{{ comment.submission_time.strftime('%m-%d %H:%M') }}</div>
+                                    <div class="btn">
+                                    <div><a href="/comment/{{ comment.id }}/edit-comment/{{ question.id }}"><button>Edit</button></a></div>
                                     <div><a href='/delete/answer/comment/{{ comment.id }}/{{ question.id }}'><button>X</button></a></div>
-
+                                    </div>
                                 </div>
                                  <br>
                                 <div class="answer_comment_message">

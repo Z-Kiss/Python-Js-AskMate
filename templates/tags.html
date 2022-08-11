@@ -1,12 +1,19 @@
 {% include 'layout.html' %}
 
 {% block content %}
-    <table>
-    {% for tag in tags %}
-    <tr>
-        <td>{{ tag.name }}</td>
-        <td>{{ tag.q_count }}</td>
-    </tr>
-    {% endfor %}
-    </table>
+    <div class="tag_container">
+         <table class="tag_table">
+        <tr>
+            <th style="padding: 5px">Tag name</th>
+            <th>Amount of tags</th>
+        </tr>
+            {% for tag in tags %}
+            <tr class="table_content">
+                <td>{{ tag.name }}</td>
+                <td>{{ tag.q_count }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
 {% endblock %}

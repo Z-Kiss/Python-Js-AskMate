@@ -1,10 +1,13 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-<h1>Edit answer</h1>
-        <form action="/answer/{{ answer.id }}/edit/{{ question_id }}" method="POST">
-            <label for="message">Message:</label><br>
-                <textarea id="message" name="message" rows="8" cols="50" required>{{ answer.message }}</textarea><br>
-    <button type="submit">Edit answer</button>
+<div class="form_wrap">
 
+        <form class="forms" action="/comment/{{ comment.id }}/edit-comment/{{ question_id }}" method="POST">
+            <h1>Edit comment</h1>
+            <label for="message">Message:</label><br>
+            <textarea id="message" name="message" rows="8" cols="50" required>{{ comment.message }}</textarea><br>
+            <button type="submit">Edit comment</button>
+        </form>
+</div>
 {% endblock %}

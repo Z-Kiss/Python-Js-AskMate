@@ -2,15 +2,15 @@
 
 
 {% block content %}
-
-<form class="search" action="/question/search" method="POST">
+<div class="form_wrap">
+<form class="forms" action="/question/search" method="POST">
     <label for="search">What are you searching for?</label>
-    <br><br>
+    <br>
     <input type="text" name="search">
-
+    <br>
     <button style="align-self: center" type="submit">For this!</button>
 </form>
-
+</div>
 {% if questions %}
      <h1 style="text-align: center">Questions</h1>
     {% for question in questions %}
