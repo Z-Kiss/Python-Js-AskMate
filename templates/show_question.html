@@ -104,7 +104,8 @@
 
                <div class="answer_body">
                    <div class="answer_title">
-                        Vote number:{{ answer.vote_number }}
+                        <div>Vote:{{ answer.vote_number }}</div>
+                       <div>Posted by: {{ answer.user_name}}</div>
                        <div><a href="/answer/{{ answer.id }}/new-comment/{{ question.id }}"><button>Write A Comment!</button></a></div>
                        <div><a href="/answer/{{ answer.id }}/edit/{{ question.id }}"><button>Edit</button></a></div>
                        <div id="btn">

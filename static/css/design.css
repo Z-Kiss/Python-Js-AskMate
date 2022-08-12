@@ -425,3 +425,9 @@ th, td {
     background-color: #44CBB1;
     margin-bottom: 20px;
 }
+.table_wrap{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+}
