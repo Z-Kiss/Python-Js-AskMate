@@ -2,7 +2,7 @@ import flask
 import datetime
 
 import psycopg2.errors
-from flask import Flask, request, redirect, flash, url_for, render_template,session
+from flask import Flask, request, redirect, flash, url_for, render_template, session
 import data_manager
 import user_data_manager
 import utils
@@ -10,13 +10,13 @@ from bonus_questions import SAMPLE_QUESTIONS
 
 app = Flask(__name__)
 
-
 app.config['SECRET_KEY'] = "francosize"
 
 
 @app.route("/bonus-questions")
 def main():
     return render_template('bonus_questions.html', questions=SAMPLE_QUESTIONS)
+
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
@@ -74,7 +74,7 @@ def short_five_latest():
     return render_template("show_all_question.html", questions=questions, tags=tags, user='Hi ' + session['username'])
 
 
-@app.route("/list", methods=['GET','POST'])
+@app.route("/list", methods=['GET', 'POST'])
 def show_all_questions():
     if request.method == 'GET':
         questions = data_manager.show_all_question()
@@ -271,11 +271,13 @@ def accept_answer(answer_id, user_name, question_id):
     user_data_manager.update_honor_answer(user_name, 'accept')
     return redirect(url_for("show_question", question_id=question_id))
 
+
 @app.route('/reject/<answer_id>/<user_name>/<question_id>')
 def reject_answer(answer_id, user_name, question_id):
     data_manager.reject_answer(answer_id)
     user_data_manager.update_honor_answer(user_name, 'reject')
     return redirect(url_for("show_question", question_id=question_id))
+
 
 @app.route('/tags')
 def show_tags():
@@ -297,11 +299,8 @@ def show_user(user_name):
     user_questions = user_data_manager.get_user_questions(get_user[0]['id '])
     user_answers = user_data_manager.get_user_answers(get_user[0]['id '])
     user_comments = user_data_manager.get_user_comments(get_user[0]['user_name'])
-    print(user_comments)
-    print(user_answers)
-    print(get_user)
-    print(user_questions)
-    return render_template('user_page.html', get_user=get_user, user_questions=user_questions, user_answers=user_answers, user_comments=user_comments)
+    return render_template('user_page.html', get_user=get_user, user_questions=user_questions,
+                           user_answers=user_answers, user_comments=user_comments)
 
 
 if __name__ == '__main__':
