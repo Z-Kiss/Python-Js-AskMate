@@ -36,7 +36,7 @@ def get_question_by_id(cursor, data_id):
 
 
 @databases_common.connection_handler
-def get_answer(cursor, answer_id):
+def get_answer_by_id(cursor, answer_id):
     cursor.execute("""
     SELECT *
     FROM answer
@@ -88,21 +88,23 @@ def get_comment_for_answer(cursor, data_id):
 @databases_common.connection_handler
 def add_question(cursor, title, message, time, image):
     cursor.execute("""
-            INSERT INTO question(user_name, title, message, submission_time, vote_number, view_number, image)
+            INSERT INTO question(user_name, user_id, title, message, submission_time, vote_number, view_number, image)
              VALUES
-            (%(name)s, %(title)s, %(message)s, %(time)s, 0, 0, %(image)s)
+            (%(name)s, %(id)s, %(title)s, %(message)s, %(time)s, 0, 0, %(image)s)
             RETURNING id
             """,
-                   {'name': session['username'], 'title': title, 'message': message, 'time': time, 'image': image})
+                   {'name': session['username'], 'id': session['user_id'], 'title': title, 'message': message,
+                    'time': time, 'image': image})
     return cursor.fetchone()
 
 
 @databases_common.connection_handler
 def add_answer(cursor, message, time, image, question_id):
     cursor.execute("""
-    INSERT INTO answer(user_name, submission_time, vote_number, question_id, message, image)
-    VALUES( %(name)s, %(time)s, 0, %(question_id)s, %(message)s, %(image)s )""",
-                   {'name': session['username'], 'time': time, 'question_id': question_id, 'message': message,
+    INSERT INTO answer(user_name, user_id, submission_time, vote_number, question_id, message, image)
+    VALUES( %(name)s, %(id)s, %(time)s, 0, %(question_id)s, %(message)s, %(image)s )""",
+                   {'name': session['username'], 'id': session['user_id'], 'time': time, 'question_id': question_id,
+                    'message': message,
                     'image': image})
 
 
