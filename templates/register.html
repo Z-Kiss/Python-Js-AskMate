@@ -18,7 +18,7 @@
         {% endif %}
     {% endwith %}
     <div class="login_wrap">
-        <form class="forms" action="/register" method="post">
+        <form class="forms" action="/auth/register" method="post">
 
             <label>Username</label>
             <input required type="text" name="username" placeholder="Write your username"><br>
@@ -28,7 +28,7 @@
             <input required type="password" name="password" placeholder="Write your password"><br>
             <button type="submit">Register</button>
             <br>
-            <div style="align-self: center"><a href="/login"><button type="button">Login</button></a></div>
+            <div style="align-self: center"><a href="/auth/login"><button type="button">Login</button></a></div>
         </form>
     </div>
 
