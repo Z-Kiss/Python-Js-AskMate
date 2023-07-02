@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block page_title %}
-    {% if requested_question == None %}
+    {% if question == None %}
         Add question
     {% else %}
         Edit question
@@ -10,9 +10,9 @@
 
 {% block content %}
     <div class="ask_edit_question">
-        {% if requested_question == None %}
+        {% if question == None %}
         <div class="form_wrap">
-            <form class="forms" action="/add-question" method="post" enctype="multipart/form-data">
+            <form class="forms" action="/question/add" method="post" enctype="multipart/form-data">
             <h1>Ask a question</h1>
                 <label for="title">Title:</label><br>
                 <textarea id="title" name="title" rows="3" cols="50" required></textarea><br><br>
@@ -28,7 +28,7 @@
         </div>
         {% else %}
         <div class="form_wrap">
-            <form class="forms" action="/question/{{ question.id }}/edit" method="POST" enctype="multipart/form-data">
+            <form class="forms" action="/question/edit/{{ question.id }}" method="POST" enctype="multipart/form-data">
                 <h1>Edit question</h1>
                 <label for="title">Title:</label><br>
                 <textarea id="title" name="title" rows="3" cols="50" required>{{ question.title }}</textarea><br><br>

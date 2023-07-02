@@ -56,8 +56,8 @@
                     </div>
                     <div class="question_footer">
                         <div class="btn">
-                            <div ><a href="/question/{{ question.id }}/vote/up"><button>&uarr;</button></a></div>
-                            <div><a href="/question/{{ question.id }}/vote/down"><button>&darr;</button></a></div>
+                            <div><a href="/question/vote/{{ question.id }}/up"><button>&uarr;</button></a></div>
+                            <div><a href="/question/vote/{{ question.id }}/down"><button>&darr;</button></a></div>
                         </div>
                         <div class="tag">
                             {% if tags[loop.index0] %}
