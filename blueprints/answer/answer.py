@@ -41,7 +41,7 @@ def edit_answer(answer_id, question_id):
 def vote_answer(answer_id, type_of_vote, question_id):
     user_name = user_data_manager.select_name_by_answer(answer_id)
     user_data_manager.update_honor_answer(user_name['user_name'], type_of_vote)
-    honor = user_data_manager.get_honor_by_username()
+    honor = user_data_manager.get_own_honor()
     session['honor'] = honor['honor']
     data_manager.change_vote_answer(answer_id, type_of_vote)
     return redirect(url_for("show_question", question_id=question_id))
