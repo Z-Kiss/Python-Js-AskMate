@@ -48,7 +48,7 @@
                 </div>
                 <div class="btn">
                     <div><a href="/question/{{ question.id }}/new-comment"><button>Add new Comment</button></a></div>
-                    <div><a href="/add_answer/{{ question.id }}"><button>Add new answer</button></a></div>
+                    <div><a href="/answer/{{ question.id }}"><button>Add new answer</button></a></div>
                     <div><a href="/add_tag/{{ question.id }}"><button>Add tag</button></a></div>
                 </div>
             </div>
@@ -86,13 +86,12 @@
 
     <div class="answer_container">
     {% if answers %}
-
         {% for answer in answers %}
-            {% if question.user_name == session.username and answer.user_name != question.user_name %}
+            {% if question.user_id == session.user_id and answer.user_id != question.user_id %}
                 {% if answer.accepted == false %}
-                <div class="answer_button"><a href="/accept/{{ answer.id }}/{{ answer.user_name }}/{{ question.id }}"><button>Accept answer</button></a></div>
+                <div class="answer_button"><a href="/answer/accept/{{ answer.id }}/{{ question.id }}"><button>Accept answer</button></a></div>
                     {% else %}
-                <div class="answer_button"><a href="/reject/{{ answer.id }}/{{ answer.user_name }}/{{ question.id }}"><button>Reject answer</button></a></div>
+                <div class="answer_button"><a href="/answer/reject/{{ answer.id }}/{{ question.id }}"><button>Reject answer</button></a></div>
                 {% endif %}
             {% endif %}
         {% if answer.accepted == false %}
@@ -108,6 +107,7 @@
                        <div>Posted by: {{ answer.user_name}}</div>
                        <div><a href="/answer/{{ answer.id }}/new-comment/{{ question.id }}"><button>Write A Comment!</button></a></div>
                        <div><a href="/answer/{{ answer.id }}/edit/{{ question.id }}"><button>Edit</button></a></div>
+                       <div><a href="/answer/delete/{{ answer.id }}/{{ question.id }}"><button>X</button></a></div>
                        <div id="btn">
                            <a href="/answer/{{ answer.id }}/vote/up/{{ question.id }}"><button>&uarr;</button></a>
                            <a href="/answer/{{ answer.id }}/vote/down/{{ question.id }}"><button>&darr;</button></a>
