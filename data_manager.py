@@ -13,7 +13,7 @@ UPLOAD_FOLDER = 'static/image/'
 
 
 @databases_common.connection_handler
-def show_all_question(cursor, order_by='submission_time', order_direction='desc'):
+def show_all_question(cursor, order_by, order_direction):
     query = sql.SQL("SELECT * FROM question ORDER BY {} {};").format(sql.Identifier(order_by), sql.SQL(order_direction))
     cursor.execute(query)
     return cursor.fetchall()
@@ -102,7 +102,8 @@ def add_answer(cursor, message, time, image, question_id):
     cursor.execute("""
     INSERT INTO answer(user_name, submission_time, vote_number, question_id, message, image)
     VALUES( %(name)s, %(time)s, 0, %(question_id)s, %(message)s, %(image)s )""",
-        {'name': session['username'], 'time': time, 'question_id': question_id, 'message': message, 'image': image})
+                   {'name': session['username'], 'time': time, 'question_id': question_id, 'message': message,
+                    'image': image})
 
 
 @databases_common.connection_handler
@@ -237,6 +238,7 @@ def increase_view(cursor, data_id):
                     WHERE id = %(id)s""",
                    {"id": data_id})
 
+
 @databases_common.connection_handler
 def get_image_to_answer(cursor, answer_id):
     cursor.execute("""
@@ -245,6 +247,7 @@ def get_image_to_answer(cursor, answer_id):
                    {'answer_id': answer_id})
     return cursor.fetchone()
 
+
 @databases_common.connection_handler
 def get_image_to_question(cursor, question_id):
     cursor.execute("""
@@ -252,6 +255,7 @@ def get_image_to_question(cursor, question_id):
     WHERE question.id = %(question_id)s""",
                    {'question_id': question_id})
     return cursor.fetchone()
+
 
 def get_answers_and_comments(question):
     answers = get_answers_for_question(question['id'])
@@ -315,6 +319,7 @@ def add_tags(cursor, tags, question_id):
         VALUES (%(question_id)s, %(id_of_tag)s)""",
                        {'question_id': question_id, 'id_of_tag': id_of_tag['id']})
 
+
 @databases_common.connection_handler
 def get_all_tags(cursor):
     cursor.execute("""
@@ -323,6 +328,7 @@ def get_all_tags(cursor):
     GROUP BY  tag.name""")
     return cursor.fetchall()
 
+
 @databases_common.connection_handler
 def accept_answer(cursor, answer_id):
     cursor.execute("""
@@ -330,6 +336,7 @@ def accept_answer(cursor, answer_id):
             SET accepted = true
             WHERE answer.id = %(answer_id)s""",
                    {"answer_id": answer_id})
+
 
 @databases_common.connection_handler
 def reject_answer(cursor, answer_id):

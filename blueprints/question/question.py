@@ -5,17 +5,18 @@ from flask import Blueprint, request, render_template, redirect, url_for, sessio
 import data_manager
 import user_data_manager
 
-question_blueprint = Blueprint('question', __name__)
+question_blueprint = Blueprint('question', __name__, url_prefix='/question')
 
 
-@question_blueprint.route("/list", methods=['GET', 'POST'])
+@question_blueprint.get("/show")
 def show_all_questions():
-    if request.method == 'GET':
-        questions = data_manager.show_all_question()
-    elif request.method == 'POST':
-        order_by = request.form.get('order_by')
-        order_direction = request.form.get('order_direction')
-        questions = data_manager.show_all_question(order_by, order_direction)
+    order_by = request.args.get('order_by')
+    if not order_by:
+        order_by = 'submission_time'
+    order_direction = request.args.get('order_direction')
+    if not order_direction:
+        order_direction = 'desc'
+    questions = data_manager.show_all_question(order_by, order_direction)
     tags = [data_manager.get_tags_for_question(question['id']) for question in questions]
     return render_template("show_all_question.html", questions=questions, tags=tags)
 
