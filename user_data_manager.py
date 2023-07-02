@@ -120,9 +120,9 @@ def get_user_details(cursor, username):
 @databases_common.connection_handler
 def get_user_questions(cursor, user_id):
     query = """
-            SELECT id, title, message FROM question
+            SELECT * FROM question
             LEFT JOIN users_data ud on question.user_name = ud.user_name
-            WHERE ud."id " = %(id)s"""
+            WHERE ud.id = %(id)s"""
     cursor.execute(query, {'id': user_id})
     return cursor.fetchall()
 
@@ -132,7 +132,7 @@ def get_user_answers(cursor, answer_id):
     query = """
             SELECT * FROM answer
             LEFT JOIN users_data ud on answer.user_name = ud.user_name
-            WHERE ud."id " = %(id)s"""
+            WHERE ud.id = %(id)s"""
     cursor.execute(query, {'id': answer_id})
     return cursor.fetchall()
 
