@@ -2,8 +2,7 @@
 
 {% block content %}
 <div class="form_wrap">
-
-        <form class="forms" action="/comment/{{ comment.id }}/edit-comment/{{ question_id }}" method="POST">
+        <form class="forms" action="/comment/edit/{{ comment.id }}/{{ question_id }}" method="POST">
             <h1>Edit comment</h1>
             <label for="message">Message:</label><br>
             <textarea id="message" name="message" rows="8" cols="50" required>{{ comment.message }}</textarea><br>

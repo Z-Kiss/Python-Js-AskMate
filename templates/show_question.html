@@ -47,7 +47,7 @@
                     {% endif %}
                 </div>
                 <div class="btn">
-                    <div><a href="/question/{{ question.id }}/new-comment"><button>Add new Comment</button></a></div>
+                    <div><a href="/comment/{{ question.id }}"><button>Add new Comment</button></a></div>
                     <div><a href="/answer/{{ question.id }}"><button>Add new answer</button></a></div>
                     <div><a href="/add_tag/{{ question.id }}"><button>Add tag</button></a></div>
                 </div>
@@ -64,7 +64,10 @@
         <div class="comment">
             <div class="comment_header">
                 <div>Posted by: {{ comment.user_name }}</div>
-                <div><a href="/delete/question/comment/{{ comment.id }}/{{ question.id }}"><button>X</button></a></div>
+                <div class="comment_buttons">
+                    <div><a href="/comment/edit/{{ comment.id }}/{{ question.id }}"><button>Edit</button></a></div>
+                    <div><a href="/comment/delete/{{ comment.id }}/{{ question.id }}"><button>X</button></a></div>
+                </div>
             </div>
             <div class="comment_body">
                 {{ comment.message }}
@@ -105,7 +108,7 @@
                    <div class="answer_title">
                         <div>Vote:{{ answer.vote_number }}</div>
                        <div>Posted by: {{ answer.user_name}}</div>
-                       <div><a href="/answer/{{ answer.id }}/new-comment/{{ question.id }}"><button>Write A Comment!</button></a></div>
+                       <div><a href="/comment/{{ answer.id }}/{{ question.id }}"><button>Write A Comment!</button></a></div>
                        <div><a href="/answer/{{ answer.id }}/edit/{{ question.id }}"><button>Edit</button></a></div>
                        <div><a href="/answer/delete/{{ answer.id }}/{{ question.id }}"><button>X</button></a></div>
                        <div id="btn">
@@ -132,8 +135,8 @@
                                     <div>Created by: {{ comment.user_name }}</div>
                                     <div>Posted at:{{ comment.submission_time.strftime('%m-%d %H:%M') }}</div>
                                     <div class="btn">
-                                    <div><a href="/comment/{{ comment.id }}/edit-comment/{{ question.id }}"><button>Edit</button></a></div>
-                                    <div><a href='/delete/answer/comment/{{ comment.id }}/{{ question.id }}'><button>X</button></a></div>
+                                    <div><a href="/comment/edit/{{ comment.id }}/{{ question.id }}"><button>Edit</button></a></div>
+                                    <div><a href='/comment/delete/{{ comment.id }}/{{ question.id }}'><button>X</button></a></div>
                                     </div>
                                 </div>
                                  <br>

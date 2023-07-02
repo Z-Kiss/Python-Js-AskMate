@@ -156,6 +156,10 @@ a{
     margin-top: 10px;
 }
 
+.comment_buttons{
+    display: flex;
+    flex-direction: row;
+}
 
 .answer_container {
     display: flex;
@@ -224,6 +228,7 @@ a{
 }
 .answer_comment_header{
     display: flex;
+
     justify-content: space-between;
 }
 
