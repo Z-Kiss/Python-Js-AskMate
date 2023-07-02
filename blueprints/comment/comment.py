@@ -45,8 +45,4 @@ def delete_comment(comment_id, question_id):
     data_manager.delete_comment(comment_id)
     return redirect(url_for('show_question', question_id=question_id, view='no'))
 
-# TODO change html link
-# @comment_blueprint.route('/delete/answer/comment/<comment_id>/<question_id>')
-# def delete_comment_by_answer(comment_id, question_id):
-#     data_manager.delete_comment_by_answer(comment_id)
-#     return redirect(url_for('show_question', question_id=question_id, view='no'))
+
