@@ -4,7 +4,7 @@ import psycopg2.errors
 import user_data_manager
 import utils
 
-from flask import Blueprint, request, render_template, flash, redirect, session, jsonify
+from flask import Blueprint, request, render_template, flash, redirect, session
 
 auth_blueprint = Blueprint('auth,', __name__, url_prefix='/auth')
 
