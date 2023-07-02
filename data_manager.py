@@ -109,20 +109,20 @@ def add_answer(cursor, message, time, image, question_id):
 
 
 @databases_common.connection_handler
-def add_comment(cursor, question_id, message, submission_time, edited_count=0):
+def add_comment_to_question(cursor, question_id, message, submission_time):
     query = """
                 INSERT INTO comment (user_name, question_id, message, submission_time, edited_count)
                 VALUES (%(name)s, %(question_id)s, %(message)s, %(submission_time)s, %(edited_count)s)
                 """
     args = {'name': session['username'], 'question_id': question_id, 'message': message,
-            'submission_time': submission_time, 'edited_count': edited_count
+            'submission_time': submission_time, 'edited_count': 0
             }
     cursor.execute(query, args)
 
 
 # add data corresponding something
 @databases_common.connection_handler
-def comment_answer(cursor, answer_id, message, submission_time):
+def add_comment_to_answer(cursor, answer_id, message, submission_time):
     query = """
             INSERT INTO comment (user_name, answer_id, message,submission_time,edited_count)
             VALUES (%(name)s, %(answer_id)s,%(message)s,%(submission_time)s, 0)
