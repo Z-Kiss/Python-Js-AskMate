@@ -8,9 +8,9 @@ import user_data_manager
 answer_blueprint = Blueprint('answer', __name__, url_prefix='/answer')
 
 
-@answer_blueprint.get("/<question_id>")
+@answer_blueprint.get("/<question_id>/")
 def show_add_answer_form(question_id):
-    return render_template('answer.html', requested_answer=None, question_id=question_id)
+    return render_template('add_answer.html', question_id=question_id)
 
 
 @answer_blueprint.post("/<question_id>")
