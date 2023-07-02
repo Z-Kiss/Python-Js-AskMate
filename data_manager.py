@@ -28,7 +28,7 @@ def show_five_latest(cursor):
 
 
 @databases_common.connection_handler
-def get_question(cursor, data_id):
+def get_question_by_id(cursor, data_id):
     cursor.execute("""SELECT * FROM question
                         WHERE id = %(id)s""",
                    {"id": data_id})
