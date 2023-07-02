@@ -39,10 +39,10 @@ def add_question():
     title = request.form.get('title')
     message = request.form.get('message')
     image = data_manager.upload_image()
-    q_id = data_manager.add_question(title, message, time, image)
+    question_id = data_manager.add_question(title, message, time, image)
     tags = request.form.get('tag').split()
     data_manager.update_tags(tags)
-    data_manager.add_tags(tags, q_id['id'])
+    data_manager.add_tags(tags, question_id['id'])
     return redirect("/")
 
 
