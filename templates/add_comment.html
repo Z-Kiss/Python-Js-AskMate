@@ -2,12 +2,18 @@
 
 {% block content %}
 
-       <div class="form_wrap">
-        <form class="forms" action="/answer/{{ answer_id }}/new-comment/{{ question_id }}" method="POST" enctype="multipart/form-data">
-            <h1>Write a comment to this answer</h1>
-            <label for="message">Message:</label><br>
-            <textarea id="comment" name="message" placeholder="Add comment" rows="5" cols="40"></textarea><br>
-            <button type="submit">Submit comment</button>
+    <div class="form_wrap">
+        {% if answer_id %}
+            <form class="forms" action="/comment/answer/{{ answer_id }}/{{ question_id }}" method="POST"
+                  enctype="multipart/form-data">
+        {% else %}
+            <form class="forms" action="/comment/question/{{ question_id }}" method="POST"
+                  enctype="multipart/form-data">
+        {% endif %}
+        <h1>Write your Comment</h1>
+        <label for="message">Message:</label><br>
+        <textarea id="comment" name="message" placeholder="Add comment" rows="5" cols="40"></textarea><br>
+        <button type="submit">Submit comment</button>
         </form>
-        </div>
+    </div>
 {% endblock %}
