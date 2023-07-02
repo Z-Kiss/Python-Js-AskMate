@@ -4,11 +4,13 @@ from flask import Blueprint, request, render_template, redirect, url_for, sessio
 
 import data_manager
 import user_data_manager
+from utils import login_required
 
 question_blueprint = Blueprint('question', __name__, url_prefix='/question')
 
 
 @question_blueprint.get("/show")
+@login_required
 def show_all_questions():
     order_by = request.args.get('order_by')
     if not order_by:
@@ -22,6 +24,7 @@ def show_all_questions():
 
 
 @question_blueprint.get("/<question_id>")
+@login_required
 def show_question(question_id):
     if request.args.get('view') != "no":
         data_manager.increase_view(question_id)
@@ -34,6 +37,7 @@ def show_question(question_id):
 
 
 @question_blueprint.post("/add")
+@login_required
 def add_question():
     time = datetime.now()
     title = request.form.get('title')
@@ -47,17 +51,20 @@ def add_question():
 
 
 @question_blueprint.get("/add")
+@login_required
 def show_add_question_form():
     return render_template('ask_edit_question.html', question=None)
 
 
 @question_blueprint.get('/edit/<question_id>')
+@login_required
 def show_question_editor(question_id):
     question = data_manager.get_question_by_id(question_id, )
     return render_template('ask_edit_question.html', question=question)
 
 
 @question_blueprint.post('/edit/<question_id>')
+@login_required
 def edit_question(question_id):
     image = request.files['picture']
     if image:
@@ -70,12 +77,14 @@ def edit_question(question_id):
 
 
 @question_blueprint.route("/delete/<question_id>")
+@login_required
 def delete_question(question_id):
     data_manager.delete_question(question_id)
     return redirect(url_for('question.show_all_questions'))
 
 
 @question_blueprint.get("/search")
+@login_required
 def search_question():
     search_word = request.args.get('search')
     if not search_word:
@@ -90,6 +99,7 @@ def search_question():
 
 
 @question_blueprint.get("/vote/<question_id>/<type_of_vote>")
+@login_required
 def vote_question(question_id, type_of_vote):
     question = data_manager.get_question_by_id(question_id)
     user_id = question['user_id']
