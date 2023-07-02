@@ -8,6 +8,7 @@ from blueprints.comment.comment import comment_blueprint
 from blueprints.question.question import question_blueprint
 from blueprints.tag.tag import tag_blueprint
 from blueprints.user.user import user_blueprint
+from utils import login_required
 
 load_dotenv(find_dotenv("config.env"))
 app = Flask(__name__)
@@ -22,9 +23,8 @@ app.register_blueprint(user_blueprint)
 
 
 @app.route("/")
+@login_required
 def short_five_latest():
-    if 'username' not in session:
-        return redirect('/login')
     questions = data_manager.show_five_latest()
     tags = [data_manager.get_tags_for_question(question['id']) for question in questions]
     return render_template("show_all_question.html", questions=questions, tags=tags, user='Hi ' + session['username'])
