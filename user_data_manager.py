@@ -25,6 +25,15 @@ def get_user_data_by_email(cursor, email):
 
 
 @databases_common.connection_handler
+def get_user_by_id(cursor, user_id):
+    cursor.execute("""
+    SELECT * FROM users_data
+    WHERE id = %(id)s""",
+                   {'id': user_id})
+    return cursor.fetchone()
+
+
+@databases_common.connection_handler
 def update_honor_question(cursor, user_name, vote):
     if vote == "down":
         query = """
