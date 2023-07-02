@@ -14,7 +14,7 @@ def show_register():
     return render_template("register.html")
 
 
-@auth_blueprint.route("/register", methods=['GET', 'POST'])
+@auth_blueprint.post("/register")
 def register():
     username = request.form.get('username')
     email = request.form.get('email')
@@ -24,7 +24,7 @@ def register():
         user_data_manager.register(username, email, psw, time)
     except psycopg2.errors.UniqueViolation:
         flash('Username or Email already in use!')
-    return redirect("/login")
+    return redirect("/auth/login")
 
 
 @auth_blueprint.get('/login')
@@ -46,10 +46,10 @@ def login():
             return redirect('/')
         else:
             flash('Incorrect Password/email')
-            return redirect('/login')
+            return redirect('/auth/login')
     else:
         flash('Incorrect Password/Email')
-        return redirect('/login')
+        return redirect('/auth/login')
 
 
 @auth_blueprint.route("/logout")
@@ -58,4 +58,4 @@ def logout():
         username = session['username']
         session.clear()
         flash(f"You have been logged out {username}")
-        return redirect("/")
+        return redirect("/auth/login")
