@@ -30,8 +30,9 @@ CREATE TABLE question (
 
 DROP TABLE IF EXISTS answer CASCADE ;
 CREATE TABLE answer (
-    user_name TEXT NOT NULL,
     id SERIAL PRIMARY KEY,
+    user_name TEXT NOT NULL,
+    user_id INT REFERENCES users_data ON DELETE CASCADE,
     submission_time TIMESTAMP WITHOUT TIME ZONE,
     vote_number INT,
     question_id INT REFERENCES question(id) ON DELETE CASCADE,
