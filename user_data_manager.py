@@ -34,18 +34,18 @@ def get_user_by_id(cursor, user_id):
 
 
 @databases_common.connection_handler
-def update_honor_question(cursor, user_name, vote):
+def update_honor_question(cursor, user_id, vote):
     if vote == "down":
         query = """
                 UPDATE users_data 
                 SET honor = honor - 2 
-                WHERE users_data.user_name = %(user_name)s"""
+                WHERE users_data.id = %(user_id)s"""
     elif vote == "up":
         query = """
                 UPDATE users_data 
                 SET honor = honor + 5
-                WHERE users_data.user_name = %(user_name)s"""
-    cursor.execute(query, {"user_name": user_name})
+                WHERE users_data.id = %(user_id)s"""
+    cursor.execute(query, {"user_id": user_id})
 
 
 @databases_common.connection_handler
@@ -95,11 +95,11 @@ def select_name_by_answer(cursor, answer_id):
 
 
 @databases_common.connection_handler
-def get_honor_by_username(cursor):
+def get_own_honor(cursor):
     cursor.execute("""
-    SELECT honor FROM users_data
-    WHERE user_name = %(name)s""",
-                   {'name': session['username']})
+    SELECT honor as point FROM users_data
+    WHERE id = %(user_id)s""",
+                   {'user_id': session['user_id']})
     return cursor.fetchone()
 
 
