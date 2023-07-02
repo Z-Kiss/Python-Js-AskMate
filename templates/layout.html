@@ -1,34 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block page_title %} Main page{% endblock %} - Ask Máté</title>
-        <link rel="stylesheet" href="/static/css/design.css">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block page_title %} Main page{% endblock %} - Ask Máté</title>
+    <link rel="stylesheet" href="/static/css/design.css">
 
-    </head>
-    <body>
-        <div class="header_container">
-            <div class="header">
-                <div id="nav_buttons" >
-                    <div id="logo"><img  src="/static/image/logo1.jpg" alt="logo" width="120px" height="120px"></div>
-                             <div class="header_nav">
-                                 <div><a href="/question/show">Show all questions</a> </div>
-                                 <div><a href="/tags">Show tags</a> </div>
-                                 <div><a href="/question/search">Search</a> </div>
-                                 <div><a href="/question/add">Ask Something from Máté</a> </div>
-                            </div>
-                            <div class="user_buttons">
-                                <div>Hy {{ session.username }} Honor: {{ session.honor }} </div>
-                                <div><a href="/users/{{ session.username }}">My profile</a></div>
-                                <div><a href="/users">Show all profile</a></div>
-                                <div><a href="/auth/logout"><button>Logout</button></a></div>
-                            </div>
-                    <div id="logo"><img  src="/static/image/logo1.jpg" alt="logo" width="120px" height="120px"></div>
-                </div>
+</head>
+<body>
+<div class="header_container">
+    <div class="header">
+        <div id="nav_buttons">
+            <div id="logo"><img src="/static/image/logo1.jpg" alt="logo" width="120px" height="120px"></div>
+            <div class="header_nav">
+                <div><a href="/question/show">Show all questions</a></div>
+                <div><a href="/tags">Show tags</a></div>
+                <div><a href="/question/search">Search</a></div>
+
             </div>
+            <div class="header_nav">
+                <div><a href="/question/add">Ask Something from Máté</a></div>
+            </div>
+            <div class="user_buttons">
+                <div>Hy {{ session.username }} Honor: {{ session.honor }} </div>
+                <div><a href="/users/{{ session.username }}">My profile</a></div>
+                <div><a href="/users">Show all profile</a></div>
+                <div><a href="/auth/logout">
+                    <button>Logout</button>
+                </a></div>
+            </div>
+            <div id="logo"><img src="/static/image/logo1.jpg" alt="logo" width="120px" height="120px"></div>
         </div>
-        {% block content %}
-        {% endblock %}
-    {% include 'footer.html' %}
-    </body>
+    </div>
+</div>
+{% block content %}
+{% endblock %}
+{% include 'footer.html' %}
+</body>
 </html>

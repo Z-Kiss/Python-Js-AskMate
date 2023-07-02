@@ -42,7 +42,7 @@
                     {% if tags %}
                         Tags:
                         {% for tag in tags %}
-                            #{{ tag.name }}<a href="/delete/{{ question.id }}/{{ tag.id }}/delete_tag"><button>x</button></a>
+                            #{{ tag.name }}<a href="/tag/delete/{{ question.id }}/{{ tag.id }}"><button>x</button></a>
                         {% endfor %}
                     {% endif %}
                 </div>
