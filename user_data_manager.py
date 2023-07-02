@@ -49,29 +49,29 @@ def update_honor_question(cursor, user_id, vote):
 
 
 @databases_common.connection_handler
-def update_honor_answer(cursor, user_name, vote):
+def update_honor_answer(cursor, user_id, vote):
     if vote == "down":
         query = """
                 UPDATE users_data 
                 SET honor = honor - 2 
-                WHERE users_data.user_name = %(user_name)s"""
+                WHERE users_data.id = %(user_id)s"""
     elif vote == "up":
         query = """
                 UPDATE users_data
                 SET honor = honor + 10
-                WHERE users_data.user_name = %(user_name)s"""
+                WHERE users_data.id = %(user_id)s"""
     elif vote == 'accept':
         query = """
                 UPDATE users_data
                 SET honor = honor + 15
-                WHERE users_data.user_name = %(user_name)s"""
+                WHERE users_data.id = %(user_id)s"""
     elif vote == 'reject':
         query = """
                     UPDATE users_data
                     SET honor = honor - 15
-                    WHERE users_data.user_name = %(user_name)s"""
+                    WHERE users_data.id = %(user_id)s"""
 
-    cursor.execute(query, {"user_name": user_name})
+    cursor.execute(query, {"user_id": user_id})
 
 
 @databases_common.connection_handler
