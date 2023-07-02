@@ -1,5 +1,5 @@
 from dotenv import load_dotenv, find_dotenv
-from flask import Flask, redirect, render_template, session
+from flask import Flask, render_template, session
 import data_manager
 
 from blueprints.answer.answer import answer_blueprint
